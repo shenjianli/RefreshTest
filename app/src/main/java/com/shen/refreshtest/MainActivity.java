@@ -3,6 +3,7 @@ package com.shen.refreshtest;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.shen.netclient.util.LogUtils;
@@ -14,17 +15,22 @@ import com.shen.refreshtest.model.Product;
 import java.util.List;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity implements HomeView{
+public class MainActivity extends AppCompatActivity implements HomeView {
 
     @Bind(R.id.log)
     TextView log;
+    @Bind(R.id.test)
+    Button mTest;
     private HomePresenter homePresenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         initData();
     }
 
@@ -76,9 +82,11 @@ public class MainActivity extends AppCompatActivity implements HomeView{
 
     @Override
     protected void onDestroy() {
-        if(null != homePresenter){
+        super.onDestroy();
+        if (null != homePresenter) {
             homePresenter.detachView();
             homePresenter = null;
         }
+        ButterKnife.unbind(this);
     }
 }

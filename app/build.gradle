@@ -60,7 +60,7 @@ android {
             buildConfigField "boolean", "AUTO_UPDATES", "false"
             buildConfigField("String","MODE","\"test\"")
             //测试版本主要使用本地MockService来返回数据，可以不设置
-            buildConfigField("String","SERVER_URL","\"test\"")
+            buildConfigField("String","SERVER_URL","\"http://m.test.shen.com.cn\"")
 
         }
         Releases{

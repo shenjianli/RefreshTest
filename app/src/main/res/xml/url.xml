@@ -12,7 +12,7 @@
         MockClass="com.shenjianli.fly.mock.RxAndroidMockService"/>
 
     <Node
-        Key="/mobile/loadMobileAppNewInfo.jhtml"
+        Key="/mobile/home/load"
         Expires="300"
         MockClass="com.shen.refreshtest.mock.HomeMockService"/>
 </url>

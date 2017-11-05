@@ -48,6 +48,7 @@ public class RefreshApp extends Application{
         if(Constants.TEST_MODE.equals(BuildConfig.MODE)){
             NetClientLib.getLibInstance().setLogEnable(true);
             NetClientLib.getLibInstance().setUrlConfigManager(R.xml.url);
+            NetClientLib.getLibInstance().setServerBaseUrl(BuildConfig.SERVER_URL);
         }
         else if(Constants.DEV_MODE.equals(BuildConfig.MODE))
         {

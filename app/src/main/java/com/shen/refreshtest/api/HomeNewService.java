@@ -9,7 +9,7 @@ import rx.Observable;
 
 public interface HomeNewService {
 	//请求的url地址
-	@GET("mobile/home/load")
+	@GET("/mobile/home/load")
 	Observable<HttpResult<HomeData>> loadMobileHomeInfo();
 
 }
