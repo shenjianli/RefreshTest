@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<url>
+    <Node
+        Key="/shenjianli/test"
+        Expires="300"
+        NetType="get"
+        MockClass="com.shenjianli.fly.mock.TestMockService"/>
+
+    <Node
+        Key="/shenjianli/rxandroid"
+        Expires="300"
+        MockClass="com.shenjianli.fly.mock.RxAndroidMockService"/>
+
+    <Node
+        Key="/mobile/loadMobileAppNewInfo.jhtml"
+        Expires="300"
+        MockClass="com.shen.refreshtest.mock.HomeMockService"/>
+</url>

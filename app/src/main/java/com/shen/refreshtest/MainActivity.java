@@ -1,0 +1,84 @@
+package com.shen.refreshtest;
+
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.TextView;
+
+import com.shen.netclient.util.LogUtils;
+import com.shen.refreshtest.engine.HomePresenter;
+import com.shen.refreshtest.engine.HomeView;
+import com.shen.refreshtest.model.HomeData;
+import com.shen.refreshtest.model.Product;
+
+import java.util.List;
+
+import butterknife.Bind;
+import butterknife.OnClick;
+
+public class MainActivity extends AppCompatActivity implements HomeView{
+
+    @Bind(R.id.log)
+    TextView log;
+    private HomePresenter homePresenter;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        initData();
+    }
+
+    private void initData() {
+        homePresenter = new HomePresenter();
+        homePresenter.attachView(this);
+    }
+
+    @OnClick({R.id.test})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.test:
+                homePresenter.loadHomeInfoData();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void updateRmdInfo(List<Product> recommends) {
+
+    }
+
+    @Override
+    public void updateHomeInfo(HomeData homeData) {
+        LogUtils.i("收到首页请求的数据：" + homeData.toString());
+    }
+
+    @Override
+    public void updateHomeError(int type) {
+
+    }
+
+    @Override
+    public void startLoading(int type) {
+
+    }
+
+    @Override
+    public void hideLoading(int type) {
+
+    }
+
+    @Override
+    public void showError(int type, String msg) {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(null != homePresenter){
+            homePresenter.detachView();
+            homePresenter = null;
+        }
+    }
+}

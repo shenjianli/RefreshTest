@@ -1,0 +1,115 @@
+apply plugin: 'com.android.application'
+
+Properties props = new Properties()
+props.load(new FileInputStream(file("signing.properties")))
+//获取时间戳
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyy_MMdd_HHmm')
+    return formattedDate
+}
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        applicationId "com.shen.refreshtest"
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+
+    signingConfigs {
+        release{
+            keyAlias props['KEY_ALIAS']
+            keyPassword props['KEY_PASSWORD']
+            storeFile file(props['KEYSTORE_FILE'])
+            storePassword props['KEYSTORE_PASSWORD']
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            zipAlignEnabled true
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+
+    productFlavors {
+        Dev{
+            applicationId "com.shen.refreshtest"
+            manifestPlaceholders = [app_name:"开发版" ,icon: "@mipmap/keep_launcher",CHANNEL_VALUE:"Dev"]
+            //在java代码中具体的使用方式为：context.getResources().getString(R.string.strKey);
+            resValue("string" , "strKey","dev版本")
+            resValue ('string','isDebug','true')
+            buildConfigField "boolean", "AUTO_UPDATES", "false"
+            buildConfigField("String","MODE","\"dev\"")
+            buildConfigField("String","SERVER_URL","\"http://m.dev.shen.com.cn/\"")
+        }
+        DevTest{
+            applicationId "com.shen.refreshtest"
+            manifestPlaceholders = [app_name:"自测版" ,icon: "@mipmap/keep_launcher",CHANNEL_VALUE:"Test"]
+            //在java代码中具体的使用方式为：context.getResources().getString(R.string.strKey);
+            resValue("string" , "strKey","beta版本")
+            resValue ('string','isDebug','true')
+            buildConfigField "boolean", "AUTO_UPDATES", "false"
+            buildConfigField("String","MODE","\"test\"")
+            //测试版本主要使用本地MockService来返回数据，可以不设置
+            buildConfigField("String","SERVER_URL","\"test\"")
+
+        }
+        Releases{
+            applicationId "com.shen.refreshtest"
+            manifestPlaceholders = [app_name:"正式版" ,icon: "@mipmap/keep_launcher",CHANNEL_VALUE:"Releases"]
+            resValue("string" , "strKey","release版本")
+            resValue ('string','isDebug','false')
+            buildConfigField "boolean", "AUTO_UPDATES", "false"
+            buildConfigField("String","MODE","\"release\"")
+            buildConfigField("String","SERVER_URL","\"http://m.shen.com.cn/\"")
+        }
+    }
+
+    //修改生成的apk名字
+    applicationVariants.all{
+        variant->
+            variant.outputs.each {
+                output->
+                    def oldFile = output.outputFile
+                    if(variant.buildType.name.equals('release')){
+                        def releaseApkName = 'keep_' + defaultConfig.versionName +
+                                '_'  + getDate() +'.apk'
+                        output.outputFile = new File(oldFile.parent, releaseApkName)
+                    }
+            }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:design:23.4.0'
+    compile 'com.android.support:cardview-v7:23.4.0'
+
+    compile 'com.jakewharton:butterknife:7.0.1'
+
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+
+    compile 'com.github.shenjianli.netclient:netclient:1.0.3'
+
+    compile ('io.reactivex:rxandroid:1.2.1'){
+        exclude module: 'rxjava'
+    }
+    compile 'com.facebook.stetho:stetho:1.4.2'
+    compile ('com.facebook.stetho:stetho-okhttp3:1.4.2'){
+        exclude module: 'okhttp'
+    }
+}
