@@ -25,6 +25,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
 
     private Subscriber<HomeData> homeDataSubscriber;
+    private Subscriber<List<Product>> homeMoreSubscriber;
 
     public HomePresenter(){
     }
@@ -201,7 +202,34 @@ public class HomePresenter extends BasePresenter<HomeView> {
      */
     public void loadRcmProductInfo(){
         LogUtils.i("开始------首页大数据推荐———————请求");
-        //商城页的最近浏览
+        homeMoreSubscriber = new Subscriber<List<Product>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(List<Product> products) {
+                LogUtils.i("大数据----获取数据成功");
+                if(null != mMvpView && null != products && products.size() >0){
+                    mMvpView.hideLoading(0);
+                    mMvpView.updateRmdInfo(products);
+                }
+            }
+        };
+        HomeNewService homeService = NetClient.retrofit().create(HomeNewService.class);
+        homeService.loadMobileHomeMoreInfo()
+                .map(new HttpResultFunc<List<Product>>())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(homeMoreSubscriber);
+
 
     }
 }

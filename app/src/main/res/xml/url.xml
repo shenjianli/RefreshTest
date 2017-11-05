@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <url>
-    <Node
-        Key="/shenjianli/test"
-        Expires="300"
-        NetType="get"
-        MockClass="com.shenjianli.fly.mock.TestMockService"/>
-
-    <Node
-        Key="/shenjianli/rxandroid"
-        Expires="300"
-        MockClass="com.shenjianli.fly.mock.RxAndroidMockService"/>
 
     <Node
         Key="/mobile/home/load"
         Expires="300"
         MockClass="com.shen.refreshtest.mock.HomeMockService"/>
+
+    <Node
+        Key="/mobile/home/more"
+        Expires="300"
+        NetType="get"
+        MockClass="com.shen.refreshtest.mock.HomeMoreMockService"/>
+
 </url>

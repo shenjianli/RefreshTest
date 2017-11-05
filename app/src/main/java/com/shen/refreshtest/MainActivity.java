@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements HomeView {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.test:
-                homePresenter.loadHomeInfoData();
+                homePresenter.loadRcmProductInfo();
                 break;
             default:
                 break;
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements HomeView {
 
     @Override
     public void updateRmdInfo(List<Product> recommends) {
-
+        LogUtils.i("收到首页--大数据---请求的数据：" + recommends.toString());
     }
 
     @Override
