@@ -1,10 +1,10 @@
 package com.shen.refreshtest.core.base;
 
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,21 +16,21 @@ public abstract class BaseFragment extends Fragment {
 
 	private final String TAG = this.getClass().getSimpleName();
 	protected BaseFragment mCurrentFragment;
-	protected Context mContext;
+	protected Context context;
 	protected View mView;
 
 	@Override
 	public void onAttach(Context activity) {
 		super.onAttach(activity);
 		LogUtils.d(TAG, "onAttach");
-		mContext = activity;
+		context = activity;
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		LogUtils.d(TAG, "onCreate");
-		initData();
+
 	}
 
 	public void initData()
@@ -42,6 +42,7 @@ public abstract class BaseFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		LogUtils.d(TAG, "onCreateView");
+		initData();
 		initView();
 		return mView;
 	}

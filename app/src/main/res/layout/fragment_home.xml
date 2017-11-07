@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <com.shen.refresh.RecyclerRefreshLayout
+        android:id="@+id/home_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.shen.refresh.RecyclerLoadMoreView
+            android:id="@+id/home_load_more_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </com.shen.refresh.RecyclerLoadMoreView>
+
+    </com.shen.refresh.RecyclerRefreshLayout>
+
+
+    <include
+        layout="@layout/home_search_title_layout"/>
+
+</RelativeLayout>

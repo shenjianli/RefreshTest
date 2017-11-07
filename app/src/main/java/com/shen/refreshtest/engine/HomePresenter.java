@@ -61,7 +61,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
                 if(null != mMvpView ){
                     LogUtils.i("成功收到新版首页数据：" + data.toString());
                     mMvpView.hideLoading(0);
-                    mMvpView.updateHomeInfo(data);
+                    mMvpView.updateHomeInfo(getHomeData());
                 }
 
             }

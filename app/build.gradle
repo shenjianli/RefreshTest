@@ -41,16 +41,7 @@ android {
 
 
     productFlavors {
-        Dev{
-            applicationId "com.shen.refreshtest"
-            manifestPlaceholders = [app_name:"开发版" ,icon: "@mipmap/keep_launcher",CHANNEL_VALUE:"Dev"]
-            //在java代码中具体的使用方式为：context.getResources().getString(R.string.strKey);
-            resValue("string" , "strKey","dev版本")
-            resValue ('string','isDebug','true')
-            buildConfigField "boolean", "AUTO_UPDATES", "false"
-            buildConfigField("String","MODE","\"dev\"")
-            buildConfigField("String","SERVER_URL","\"http://m.dev.shen.com.cn/\"")
-        }
+
         DevTest{
             applicationId "com.shen.refreshtest"
             manifestPlaceholders = [app_name:"自测版" ,icon: "@mipmap/keep_launcher",CHANNEL_VALUE:"Test"]
@@ -63,6 +54,18 @@ android {
             buildConfigField("String","SERVER_URL","\"http://m.test.shen.com.cn\"")
 
         }
+
+        Dev{
+            applicationId "com.shen.refreshtest"
+            manifestPlaceholders = [app_name:"开发版" ,icon: "@mipmap/keep_launcher",CHANNEL_VALUE:"Dev"]
+            //在java代码中具体的使用方式为：context.getResources().getString(R.string.strKey);
+            resValue("string" , "strKey","dev版本")
+            resValue ('string','isDebug','true')
+            buildConfigField "boolean", "AUTO_UPDATES", "false"
+            buildConfigField("String","MODE","\"dev\"")
+            buildConfigField("String","SERVER_URL","\"http://m.dev.shen.com.cn/\"")
+        }
+
         Releases{
             applicationId "com.shen.refreshtest"
             manifestPlaceholders = [app_name:"正式版" ,icon: "@mipmap/keep_launcher",CHANNEL_VALUE:"Releases"]
@@ -97,6 +100,8 @@ dependencies {
     compile 'com.android.support:design:23.4.0'
     compile 'com.android.support:cardview-v7:23.4.0'
 
+    compile project(':refresh')
+
     compile 'com.jakewharton:butterknife:7.0.1'
 
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
@@ -112,4 +117,7 @@ dependencies {
     compile ('com.facebook.stetho:stetho-okhttp3:1.4.2'){
         exclude module: 'okhttp'
     }
+
+    compile 'com.youth.banner:banner:1.4.10'  //最新版本
+    compile 'com.facebook.fresco:fresco:1.5.0'
 }

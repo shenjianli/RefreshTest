@@ -2,6 +2,7 @@ package com.shen.refreshtest;
 
 import android.app.Application;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.shen.netclient.NetClient;
@@ -28,6 +29,7 @@ public class RefreshApp extends Application{
         initStetho();
         initByGradleFile();
         initMemLeak();
+        Fresco.initialize(this);
     }
 
 
