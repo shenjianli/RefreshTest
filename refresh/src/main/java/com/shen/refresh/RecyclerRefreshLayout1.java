@@ -88,7 +88,7 @@ public class RecyclerRefreshLayout1 extends RelativeLayout {
     private ImageView iconRefresh;
 
     private void createProgressView() {
-        mProgressView = View.inflate(getContext(), R.layout.view_load_more, null);
+        mProgressView = View.inflate(getContext(), R.layout.refresh_pull_down_default_layout, null);
 
         //mProgressView = View.inflate(getContext(), R.layout.layout_refresh_header, null);
 
@@ -102,13 +102,13 @@ public class RecyclerRefreshLayout1 extends RelativeLayout {
 //        iconRefresh=(ImageView)mProgressView.findViewById(R.id.logo_anim);
 //        iconRefresh.setImageResource(R.drawable.refresh_tween_anim);
 
-        mGoods = (ImageView) mProgressView.findViewById(R.id.goods);
-        mPeople = (ImageView) mProgressView.findViewById(R.id.people);
-        mLoading = (LinearLayout) mProgressView.findViewById(R.id.loading);
-        mText = (TextView) mProgressView.findViewById(R.id.text_hint);
-        mStartLoad = (RelativeLayout) mProgressView.findViewById(R.id.start_load);
-        mLoadIng = (ImageView) mProgressView.findViewById(R.id.load_ing);
-        mDrawable = (AnimationDrawable) mLoadIng.getBackground();
+//        mGoods = (ImageView) mProgressView.findViewById(R.id.goods);
+//        mPeople = (ImageView) mProgressView.findViewById(R.id.people);
+//        mLoading = (LinearLayout) mProgressView.findViewById(R.id.loading);
+//        mText = (TextView) mProgressView.findViewById(R.id.text_hint);
+//        mStartLoad = (RelativeLayout) mProgressView.findViewById(R.id.start_load);
+//        mLoadIng = (ImageView) mProgressView.findViewById(R.id.load_ing);
+//        mDrawable = (AnimationDrawable) mLoadIng.getBackground();
         addView(mProgressView);
     }
 

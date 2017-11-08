@@ -160,7 +160,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
         refreshGoods = (ImageView) refreshHeaderLayout.findViewById(R.id.pull_refresh_goods);
         refreshingLoadingImg = (ImageView) refreshHeaderLayout.findViewById(R.id.pull_refreshing_load_img);
         refreshDrawable = (AnimationDrawable) refreshingLoadingImg.getBackground();
-        homeRefreshLayout.addRefreshLayout(refreshHeaderLayout);
+        //homeRefreshLayout.addRefreshLayout(refreshHeaderLayout);
     }
 
     @Override
