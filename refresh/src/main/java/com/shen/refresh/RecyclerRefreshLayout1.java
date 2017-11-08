@@ -2,15 +2,12 @@ package com.shen.refresh;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
-import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -20,31 +17,23 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
 import com.shen.refresh.util.LogUtils;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import static com.shen.refresh.RecyclerRefreshLayout.REFRESH_STATE.PULL_TO_REFRESH;
-import static com.shen.refresh.RecyclerRefreshLayout.REFRESH_STATE.REFRESHING;
-import static com.shen.refresh.RecyclerRefreshLayout.REFRESH_STATE.REFRESH_NONE;
-import static com.shen.refresh.RecyclerRefreshLayout.REFRESH_STATE.RELEASE_TO_REFRESH;
 
 /**
  * Created by jerry shen on 2017/8/2.
  */
 
-public class RecyclerRefreshLayout extends RelativeLayout {
+public class RecyclerRefreshLayout1 extends RelativeLayout {
 
     private static final String TAG = "RecyclerRefreshLayout";
     private RecyclerView mRecyclerView;
     private float mStartX;
     private float mStartY;
-    //private View mProgressView;
+    private View mProgressView;
     private ImageView mPeople;
     private ImageView mGoods;
     private TextView mText;
+    private LinearLayout mLoading;
     private RelativeLayout mStartLoad;
     private ImageView mLoadIng;
     private AnimationDrawable mDrawable;
@@ -52,11 +41,11 @@ public class RecyclerRefreshLayout extends RelativeLayout {
     private OnRefreshListener mListener;
     private boolean mToggle;
 
-    public RecyclerRefreshLayout(Context context) {
+    public RecyclerRefreshLayout1(Context context) {
         this(context, null);
     }
 
-    public RecyclerRefreshLayout(Context context, @Nullable AttributeSet attrs) {
+    public RecyclerRefreshLayout1(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         createProgressView();
         insureChildViewCount();
@@ -99,18 +88,7 @@ public class RecyclerRefreshLayout extends RelativeLayout {
     private ImageView iconRefresh;
 
     private void createProgressView() {
-        if(null == refreshHeaderLayout){
-            LogUtils.i("为空使用默认加载布局");
-            refreshHeaderLayout = View.inflate(getContext(), R.layout.view_load_more, null);
-            mGoods = (ImageView) refreshHeaderLayout.findViewById(R.id.goods);
-            mPeople = (ImageView) refreshHeaderLayout.findViewById(R.id.people);
-//        mLoading = (LinearLayout) refreshHeaderLayout.findViewById(R.id.loading);
-            mText = (TextView) refreshHeaderLayout.findViewById(R.id.text_hint);
-            mStartLoad = (RelativeLayout) refreshHeaderLayout.findViewById(R.id.start_load);
-            mLoadIng = (ImageView) refreshHeaderLayout.findViewById(R.id.load_ing);
-            mDrawable = (AnimationDrawable) mLoadIng.getBackground();
-        }
-
+        mProgressView = View.inflate(getContext(), R.layout.view_load_more, null);
 
         //mProgressView = View.inflate(getContext(), R.layout.layout_refresh_header, null);
 
@@ -124,8 +102,14 @@ public class RecyclerRefreshLayout extends RelativeLayout {
 //        iconRefresh=(ImageView)mProgressView.findViewById(R.id.logo_anim);
 //        iconRefresh.setImageResource(R.drawable.refresh_tween_anim);
 
-
-        addView(refreshHeaderLayout);
+        mGoods = (ImageView) mProgressView.findViewById(R.id.goods);
+        mPeople = (ImageView) mProgressView.findViewById(R.id.people);
+        mLoading = (LinearLayout) mProgressView.findViewById(R.id.loading);
+        mText = (TextView) mProgressView.findViewById(R.id.text_hint);
+        mStartLoad = (RelativeLayout) mProgressView.findViewById(R.id.start_load);
+        mLoadIng = (ImageView) mProgressView.findViewById(R.id.load_ing);
+        mDrawable = (AnimationDrawable) mLoadIng.getBackground();
+        addView(mProgressView);
     }
 
     public void closeRefresh() {
@@ -158,10 +142,6 @@ public class RecyclerRefreshLayout extends RelativeLayout {
                 LogUtils.i("外层----下");
                 break;
             case MotionEvent.ACTION_MOVE:
-
-                LogUtils.i("刷新布局高度：" + refreshHeaderLayout.getMeasuredHeight());
-
-
                 LogUtils.i("外层----移动");
                 float x = event.getX();
                 float y = event.getY();
@@ -172,20 +152,10 @@ public class RecyclerRefreshLayout extends RelativeLayout {
                     setScrollY(0);
                 }
 
-                if (Math.abs(getScrollY()) > refreshHeaderLayout.getMeasuredHeight()) {
+                if (Math.abs(getScrollY()) > mLoading.getMeasuredHeight()) {
                     mText.setText("松开刷新...");
-                    refreshState = RELEASE_TO_REFRESH;
-                    if(null != onRefreshTouchListener){
-                        onRefreshTouchListener.onUpdateRefreshState(REFRESH_STATE.RELEASE_TO_REFRESH);
-                    }
-                    LogUtils.i("松开刷新");
                 } else {
                     mText.setText("下拉刷新...");
-                    refreshState = PULL_TO_REFRESH;
-                    if(null != onRefreshTouchListener){
-                        onRefreshTouchListener.onUpdateRefreshState(PULL_TO_REFRESH);
-                    }
-                    LogUtils.i("下拉刷新...");
                 }
 //                Log.d(TAG, "onTouchEvent: " + getScrollY() + "|" + mLoading.getMeasuredHeight());
 //                }
@@ -195,22 +165,12 @@ public class RecyclerRefreshLayout extends RelativeLayout {
                 break;
             case MotionEvent.ACTION_UP:
                 LogUtils.i("外层----抬起");
-                if (Math.abs(getScrollY()) > refreshHeaderLayout.getMeasuredHeight()) {
+                if (Math.abs(getScrollY()) > mLoading.getMeasuredHeight()) {
                     mRefreshing = true;
                     mText.setText("更新中...");
-                    LogUtils.i("更新中...");
-                    refreshState = REFRESHING;
-                    if(null != onRefreshTouchListener){
-                        onRefreshTouchListener.onUpdateRefreshState(REFRESHING);
-                    }
-                    startAnimation(getScrollY(), refreshHeaderLayout.getMeasuredHeight());
+                    startAnimation(getScrollY(), mLoading.getMeasuredHeight());
                 } else {
                     mText.setText("下拉刷新...");
-                    LogUtils.i("下拉刷新...");
-                    refreshState = PULL_TO_REFRESH;
-                    if(null != onRefreshTouchListener){
-                        onRefreshTouchListener.onUpdateRefreshState(PULL_TO_REFRESH);
-                    }
                     startAnimation(getScrollY(), 0);
                 }
                 break;
@@ -249,23 +209,10 @@ public class RecyclerRefreshLayout extends RelativeLayout {
                     mLoadIng.setVisibility(View.GONE);
                     mStartLoad.setVisibility(View.VISIBLE);
                     mDrawable.stop();
-                    LogUtils.i("停止动画---" + refreshState);
-                    if(REFRESHING == refreshState){
-                        if(null != onRefreshTouchListener){
-                            onRefreshTouchListener.onUpdateAnimState(ANIM_STATE.ANIM_STOP);
-                        }
-                    }
-
                 } else {
                     mLoadIng.setVisibility(View.VISIBLE);
                     mStartLoad.setVisibility(View.GONE);
                     mDrawable.start();
-                    LogUtils.i("开始动画---" + refreshState);
-                    if(REFRESHING == refreshState){
-                        if(null != onRefreshTouchListener){
-                            onRefreshTouchListener.onUpdateAnimState(ANIM_STATE.ANIM_START);
-                        }
-                    }
                     if (mListener != null) {
                         mListener.OnRefresh();
                     }
@@ -325,11 +272,11 @@ public class RecyclerRefreshLayout extends RelativeLayout {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
-        refreshHeaderLayout.layout(l, t - refreshHeaderLayout.getMeasuredHeight(), r, t);
+        mProgressView.layout(l, t - mProgressView.getMeasuredHeight(), r, t);
         View childView = null;
         for (int i = 0; i < getChildCount(); i++) {
             childView = getChildAt(i);
-            if (childView != refreshHeaderLayout) {
+            if (childView != mProgressView) {
                 childView.layout(l, t, r, b);
             }
         }
@@ -347,10 +294,7 @@ public class RecyclerRefreshLayout extends RelativeLayout {
      * @param refreshHeaderLayout 刷新布局
      */
     public void addRefreshLayout(View refreshHeaderLayout) {
-        removeView(this.refreshHeaderLayout);
         this.refreshHeaderLayout = refreshHeaderLayout;
-        addView(this.refreshHeaderLayout);
-
     }
 
     public interface OnRefreshListener {
@@ -368,20 +312,6 @@ public class RecyclerRefreshLayout extends RelativeLayout {
         public void onRefreshMove(float moveY);
 
         public void onRefreshReset();
-
-        public void onUpdateRefreshState(REFRESH_STATE refreshState);
-
-        public void onUpdateAnimState(ANIM_STATE animState);
-
     }
 
-    private REFRESH_STATE refreshState = REFRESH_NONE;
-
-    public enum REFRESH_STATE {
-        PULL_TO_REFRESH, RELEASE_TO_REFRESH, REFRESHING, REFRESH_NONE
-    }
-
-    public enum ANIM_STATE {
-        ANIM_NONE, ANIM_START, ANIM_STOP,
-    }
 }

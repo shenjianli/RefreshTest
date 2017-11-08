@@ -1,5 +1,7 @@
 package com.shen.refreshtest.mock;
 
+import android.os.SystemClock;
+
 import com.google.gson.Gson;
 import com.shen.netclient.net.MockService;
 import com.shen.netclient.util.LogUtils;
@@ -29,6 +31,7 @@ public class HomeMockService extends MockService {
         result.setData(testData);
         String resultStr =  new Gson().toJson(result);
         LogUtils.i("获得的json字符串为：" + result);
+        SystemClock.sleep(2000);
         //返回json字符串
         return resultStr;
     }

@@ -7,7 +7,6 @@
         android:id="@+id/loading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="10dp">
@@ -17,18 +16,18 @@
             android:layout_height="60dp">
 
             <RelativeLayout
-                android:id="@+id/start_load"
+                android:id="@+id/pull_refresh_load_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/people"
+                    android:id="@+id/pull_refresh_people"
                     android:layout_width="41dp"
                     android:layout_height="60dp"
                     android:background="@drawable/node_modules_jdreactcorelib_libraries_jdscrollview_images_app_refresh_people_0" />
 
                 <ImageView
-                    android:id="@+id/goods"
+                    android:id="@+id/pull_refresh_goods"
                     android:layout_width="14dp"
                     android:layout_height="12dp"
                     android:layout_alignParentRight="true"
@@ -38,7 +37,7 @@
             </RelativeLayout>
 
             <ImageView
-                android:id="@+id/load_ing"
+                android:id="@+id/pull_refreshing_load_img"
                 android:layout_width="41dp"
                 android:layout_height="60dp"
                 android:background="@drawable/refresh_animation"
@@ -53,17 +52,18 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/refresh_key_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="让购物更健康"
+                android:text="shen----让购物更健康"
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/text_hint"
+                android:id="@+id/refresh_state_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:text="下拉刷新..."
+                android:text="shen----下拉刷新..."
                 android:textSize="10sp" />
 
         </LinearLayout>

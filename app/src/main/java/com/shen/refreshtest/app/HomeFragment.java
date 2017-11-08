@@ -1,6 +1,7 @@
 package com.shen.refreshtest.app;
 
 import android.animation.ArgbEvaluator;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,7 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shen.refresh.HomeAdapter;
@@ -139,8 +142,24 @@ public class HomeFragment extends BaseFragment implements HomeView {
         return mHomeView;
     }
 
+    private TextView keyTextTv;
+    private TextView refreshStateTv;
+    private RelativeLayout pullRefreshLoadLayout;
+    private ImageView refreshPeople;
+    private ImageView refreshGoods;
+    private ImageView refreshingLoadingImg;
+    private AnimationDrawable refreshDrawable;
+
     private void initRefreshLayout() {
         View refreshHeaderLayout = View.inflate(getContext(), R.layout.refresh_head_layout, null);
+
+        keyTextTv = (TextView) refreshHeaderLayout.findViewById(R.id.refresh_key_text);
+        refreshStateTv = (TextView) refreshHeaderLayout.findViewById(R.id.refresh_state_tv);
+        pullRefreshLoadLayout = (RelativeLayout) refreshHeaderLayout.findViewById(R.id.pull_refresh_load_layout);
+        refreshPeople = (ImageView) refreshHeaderLayout.findViewById(R.id.pull_refresh_people);
+        refreshGoods = (ImageView) refreshHeaderLayout.findViewById(R.id.pull_refresh_goods);
+        refreshingLoadingImg = (ImageView) refreshHeaderLayout.findViewById(R.id.pull_refreshing_load_img);
+        refreshDrawable = (AnimationDrawable) refreshingLoadingImg.getBackground();
         homeRefreshLayout.addRefreshLayout(refreshHeaderLayout);
     }
 
@@ -216,6 +235,33 @@ public class HomeFragment extends BaseFragment implements HomeView {
             public void onRefreshReset() {
                 LogUtils.i("重置显示显示");
                 searchTitleLayout.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onUpdateRefreshState(RecyclerRefreshLayout.REFRESH_STATE refreshState) {
+                if(refreshState == RecyclerRefreshLayout.REFRESH_STATE.PULL_TO_REFRESH){
+                    refreshStateTv.setText("下拉刷新。。。");
+                }
+                else if(refreshState == RecyclerRefreshLayout.REFRESH_STATE.RELEASE_TO_REFRESH){
+                    refreshStateTv.setText("松开刷新。。。");
+                }
+                else if(refreshState == RecyclerRefreshLayout.REFRESH_STATE.REFRESHING){
+                    refreshStateTv.setText("正在刷新。。。");
+                }
+            }
+
+            @Override
+            public void onUpdateAnimState(RecyclerRefreshLayout.ANIM_STATE animState) {
+                if(animState == RecyclerRefreshLayout.ANIM_STATE.ANIM_START){
+                    refreshDrawable.start();
+                    refreshingLoadingImg.setVisibility(View.VISIBLE);
+                    pullRefreshLoadLayout.setVisibility(View.GONE);
+                }
+                else if(animState == RecyclerRefreshLayout.ANIM_STATE.ANIM_STOP){
+                    refreshDrawable.stop();
+                    refreshingLoadingImg.setVisibility(View.GONE);
+                    pullRefreshLoadLayout.setVisibility(View.VISIBLE);
+                }
             }
         });
 
