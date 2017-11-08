@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_hot_sale_title_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:background="#5000e000">
+    <TextView
+        android:id="@+id/item_hot_sale_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:lines="1"
+        android:maxLines="1"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="#ec7809"
+        android:text="猜你喜欢" />
+
+</RelativeLayout>

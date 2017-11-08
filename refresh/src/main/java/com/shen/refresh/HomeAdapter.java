@@ -314,8 +314,17 @@ public class HomeAdapter extends RecyclerLoadMoreView.Adapter {
                             }
                         } //表示原来有type这一项，需要删除，数目上减少
                         else{
+                            if(hasCount > 0 && count == 0){
+                                removeHomeItemByType(type);
+                                return ;
+                            }
+
+                            List<HomeBaseData> deletes = new ArrayList<>();
                             for (int i = 0; i < -updateCnt; i++){
-                                homeBaseDatas.remove(firstIndex + i);
+                                deletes.add(homeBaseDatas.get(firstIndex + i));
+                            }
+                            if(deletes.size() > 0){
+                                homeBaseDatas.removeAll(deletes);
                             }
                         }
                     }

@@ -294,6 +294,16 @@ public class RecyclerRefreshLayout extends RelativeLayout {
         mListener = listener;
     }
 
+
+    private View refreshHeaderLayout;
+    /**
+     * 动态增加下拉刷新布局
+     * @param refreshHeaderLayout 刷新布局
+     */
+    public void addRefreshLayout(View refreshHeaderLayout) {
+        this.refreshHeaderLayout = refreshHeaderLayout;
+    }
+
     public interface OnRefreshListener {
         void OnRefresh();
     }

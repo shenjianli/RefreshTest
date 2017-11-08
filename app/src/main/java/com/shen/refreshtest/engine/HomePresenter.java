@@ -47,9 +47,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 LogUtils.i(e.getStackTrace().toString());
                 if(null != mMvpView ){
-                    HomeData homeData = getHomeData();
-                    LogUtils.i("----测试----");
-                    mMvpView.updateHomeInfo(homeData);
+                    //HomeData homeData = getHomeData();
+                    //LogUtils.i("----测试----");
+                    //mMvpView.updateHomeInfo(homeData);
                     mMvpView.showError(0, e.getMessage());
                     mMvpView.hideLoading(0);
                 }
@@ -61,7 +61,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
                 if(null != mMvpView ){
                     LogUtils.i("成功收到新版首页数据：" + data.toString());
                     mMvpView.hideLoading(0);
-                    mMvpView.updateHomeInfo(getHomeData());
+                    mMvpView.updateHomeInfo(data);
                 }
 
             }

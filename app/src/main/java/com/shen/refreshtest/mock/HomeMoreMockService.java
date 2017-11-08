@@ -1,5 +1,7 @@
 package com.shen.refreshtest.mock;
 
+import android.os.SystemClock;
+
 import com.google.gson.Gson;
 import com.shen.netclient.net.MockService;
 import com.shen.netclient.util.LogUtils;
@@ -26,6 +28,9 @@ public class HomeMoreMockService extends MockService {
         result.setData(testData);
         String resultStr =  new Gson().toJson(result);
         LogUtils.i("获得的json字符串为：" + result);
+
+        SystemClock.sleep(2000);
+
         //返回json字符串
         return resultStr;
     }
@@ -42,7 +47,7 @@ public class HomeMoreMockService extends MockService {
         List<Product> products = new ArrayList<>();
 
         Product product = new Product();
-        product.setName("新加坡馆Us CLINICALS优克利深海鱼油软胶囊欧米伽3深海1");
+        product.setName("加载更多1");
         product.setUrl("http://m.mall.icbc.com.cn/mobile/mobileProduct/product_0000579919.jhtml?fromType=index");
         product.setPrice("￥435.00");
         product.setImgUrl("http://image8.mall.icbc.com.cn/image/10012963/1459415955255_2_1.jpg");
@@ -50,35 +55,35 @@ public class HomeMoreMockService extends MockService {
 
 
         product = new Product();
-        product.setName("金牛牌特级冰糖古晋官燕 6X75G，一套三盒2");
+        product.setName("加载更多2");
         product.setUrl("http://m.mall.icbc.com.cn/mobile/mobileProduct/product_0000663700.jhtml?fromType=index");
-        product.setPrice("￥435.00");
+        product.setPrice("￥45.00");
         product.setImgUrl("http://image5.mall.icbc.com.cn/image/10013696/1492570565174_2_1.jpg");
         products.add(product);
 
         product = new Product();
-        product.setName("新加坡馆Us CLINICALS优克利深海鱼油软胶囊欧米伽3深海3");
+        product.setName("加载更多3");
         product.setUrl("http://m.mall.icbc.com.cn/mobile/mobileProduct/product_0000481011.jhtml?fromType=index");
-        product.setPrice("￥435.00");
+        product.setPrice("￥35.00");
         product.setImgUrl("http://image8.mall.icbc.com.cn/image/10012963/1459415955255_2_1.jpg");
         products.add(product);
 
         product = new Product();
-        product.setName("新加坡馆Us CLINICALS优克利深海鱼油软胶囊欧米伽3深海4");
-        product.setUrl("http://m.mall.icbc.com.cn/mobile/mobileProduct/product_0000579919.jhtml?fromType=index");
-        product.setPrice("￥45.00");
-        product.setImgUrl("http://image8.mall.icbc.com.cn/image/10012963/1459415955255_2_1.jpg");
-        products.add(product);
-
-        product = new Product();
-        product.setName("新加坡馆Us CLINICALS优克利深海鱼油软胶囊欧米伽3深海5");
+        product.setName("加载更多4");
         product.setUrl("http://m.mall.icbc.com.cn/mobile/mobileProduct/product_0000579919.jhtml?fromType=index");
         product.setPrice("￥5.00");
         product.setImgUrl("http://image8.mall.icbc.com.cn/image/10012963/1459415955255_2_1.jpg");
         products.add(product);
 
         product = new Product();
-        product.setName("新加坡馆Us-----测试用商品");
+        product.setName("加载更多5");
+        product.setUrl("http://m.mall.icbc.com.cn/mobile/mobileProduct/product_0000579919.jhtml?fromType=index");
+        product.setPrice("￥5.00");
+        product.setImgUrl("http://image8.mall.icbc.com.cn/image/10012963/1459415955255_2_1.jpg");
+        products.add(product);
+
+        product = new Product();
+        product.setName("加载更多6");
         product.setUrl("http://m.mall.icbc.com.cn/mobile/mobileProduct/product_0000579919.jhtml?fromType=index");
         product.setPrice("￥25.00");
         product.setImgUrl("http://image8.mall.icbc.com.cn/image/10012963/1459415955255_2_1.jpg");

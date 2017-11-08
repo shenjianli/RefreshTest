@@ -20,13 +20,19 @@ import com.shen.refresh.RecyclerLoadMoreView;
 import com.shen.refresh.RecyclerRefreshLayout;
 import com.shen.refresh.util.LogUtils;
 import com.shen.refreshtest.R;
+import com.shen.refreshtest.app.adapter.HotSaleAdapter;
+import com.shen.refreshtest.app.adapter.HotSaleTitleAdapter;
 import com.shen.refreshtest.app.adapter.ImgAdAdapter;
+import com.shen.refreshtest.app.adapter.NoticeAdapter;
+import com.shen.refreshtest.app.adapter.RecmdAdapter;
 import com.shen.refreshtest.app.adapter.SlideAdapter;
+import com.shen.refreshtest.core.SpacesItemDecoration;
 import com.shen.refreshtest.core.base.BaseFragment;
 import com.shen.refreshtest.engine.HomePresenter;
 import com.shen.refreshtest.engine.HomeView;
 import com.shen.refreshtest.model.HomeData;
 import com.shen.refreshtest.model.ImgData;
+import com.shen.refreshtest.model.NoticeData;
 import com.shen.refreshtest.model.Product;
 
 import java.util.ArrayList;
@@ -46,6 +52,11 @@ public class HomeFragment extends BaseFragment implements HomeView {
 
     public static final int HOME_SLIDE_TYPE = 1;
     public static final int HOME_IMG_AD_TYPE = 2;
+    public static final int HOME_NOTICE_TYPE = 3;
+
+    public static final int HOME_HOT_SALE_TITLE_TYPE = 4;
+    public static final int HOME_HOT_SALE_TYPE = 5;
+    public static final int HOME_RCM_TYPE = 6;
 
 
 
@@ -60,8 +71,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
     EditText etSearch;
     @Bind(R.id.tv_news)
     TextView tvNews;
-//    @Bind(R.id.top_container)
-//    LinearLayout topContainer;
+
     @Bind(R.id.home_search_title_layout)
     LinearLayout searchTitleLayout;
 
@@ -75,6 +85,21 @@ public class HomeFragment extends BaseFragment implements HomeView {
     //图片广告
     private ImgAdAdapter imgAdAdapter;
     private List<ImgData> imgAdDatas;
+
+    //快报
+    private NoticeAdapter noticeAdapter;
+    private List<NoticeData>   noticeDatas;
+
+    //热销商品
+    private HotSaleAdapter hotSaleAdapter;
+    private List<Product> hotSaleProducts = new ArrayList<>();
+
+    //猜你喜欢标题
+    private HotSaleTitleAdapter hotSaleTitleAdapter;
+
+    //大数据推荐
+    private RecmdAdapter recmdAdapter;
+    private List<Product> recmdProducts = new ArrayList<>();
 
 
     public static HomeFragment newInstance(String index) {
@@ -109,8 +134,14 @@ public class HomeFragment extends BaseFragment implements HomeView {
             getActivity().getWindow().setStatusBarColor(0xAA000000);
         }
         super.onCreateView(inflater,container,savedInstanceState);
+        initRefreshLayout();
         initHomeView();
         return mHomeView;
+    }
+
+    private void initRefreshLayout() {
+        View refreshHeaderLayout = View.inflate(getContext(), R.layout.refresh_head_layout, null);
+        homeRefreshLayout.addRefreshLayout(refreshHeaderLayout);
     }
 
     @Override
@@ -131,6 +162,8 @@ public class HomeFragment extends BaseFragment implements HomeView {
         homePresenter = new HomePresenter();
         homePresenter.attachView(this);
 
+        mEvaluator = new ArgbEvaluator();
+
         homeAdapter = new HomeAdapter();
 
         slideItems = new ArrayList<>();
@@ -139,13 +172,34 @@ public class HomeFragment extends BaseFragment implements HomeView {
         imgAdDatas = new ArrayList<>();
         imgAdAdapter = new ImgAdAdapter(context,imgAdDatas);
 
+
+        noticeDatas = new ArrayList<>();
+        noticeAdapter = new NoticeAdapter(context,noticeDatas);
+
+        //热销商品
+        hotSaleProducts = new ArrayList<>();
+        hotSaleAdapter = new HotSaleAdapter(context,hotSaleProducts);
+
+        //猜你喜欢标题
+        hotSaleTitleAdapter = new HotSaleTitleAdapter(context,"");
+
+        //大数据推荐
+        recmdProducts = new ArrayList<>();
+        recmdAdapter = new RecmdAdapter(context,recmdProducts);
+
         homeAdapter.addAdapter(slideAdapter);
         homeAdapter.addAdapter(imgAdAdapter);
+        homeAdapter.addAdapter(noticeAdapter);
+        homeAdapter.addAdapter(hotSaleTitleAdapter);
+        homeAdapter.addAdapter(hotSaleAdapter);
+        homeAdapter.addAdapter(recmdAdapter);
     }
 
+    private EditText searchKeyEt;
     @Override
     public void initView() {
         //searchTitleLayout = (LinearLayout) mHomeView.findViewById(R.id.home_search_title_layout);
+        searchKeyEt = (EditText) mHomeView.findViewById(R.id.et_search);
         homeRefreshLayout.setOnRefreshTouchListener(new RecyclerRefreshLayout.OnRefreshTouchListener() {
             @Override
             public void onRefreshMove(float moveY) {
@@ -175,32 +229,63 @@ public class HomeFragment extends BaseFragment implements HomeView {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 mSumY += dy;
                 //LogUtils.i("距离顶部距离：" + mSumY);
-                if (mSumY <= 5) {
-                    //searchTitleLayout.setBackgroundResource(R.drawable.titlebackimage);
-                } else if (mSumY > 5 && mSumY < 220) {
-                    //leLayout.setBackgroundResource(R.color.title_bg);
-                    searchTitleLayout.getBackground().setAlpha(mSumY);
+//                if (mSumY <= 5) {
+//                    //searchTitleLayout.setBackgroundResource(R.drawable.titlebackimage);
+//                } else if (mSumY > 5 && mSumY < 220) {
+//                    //leLayout.setBackgroundResource(R.color.title_bg);
+//                    searchTitleLayout.getBackground().setAlpha(mSumY);
+//                } else {
+////                    searchTitleLayout.setBackgroundResource(R.color.title_bg);
+//                    searchTitleLayout.getBackground().setAlpha(225);
+//                }
+
+
+                if (mSumY <= 0) {
+                    bgColor = startValue;
+                } else if (mSumY >= mDistance) {
+                    bgColor = endValue;
                 } else {
-//                    searchTitleLayout.setBackgroundResource(R.color.title_bg);
-                    searchTitleLayout.getBackground().setAlpha(225);
+                    bgColor = (int) mEvaluator.evaluate(mSumY / mDistance, startValue, endValue);
+                }
+                searchTitleLayout.setBackgroundColor(bgColor);
+            }
+        });
+        homeLoadMoreLayout.setOnRefreshListener(new RecyclerLoadMoreView.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if(null != homePresenter){
+                    homePresenter.loadRcmProductInfo();
                 }
             }
         });
         homeRefreshLayout.setOnRefreshListener(new RecyclerRefreshLayout.OnRefreshListener() {
             @Override
             public void OnRefresh() {
+                //下拉刷新时，先清空大数据推荐
+                if(null != recmdProducts && recmdProducts.size() > 0){
+                    recmdProducts.clear();
+                    homeAdapter.updateItemNumByType(HOME_RCM_TYPE);
+                    homeAdapter.notifyDataSetChanged();
+                }
                 if(null != homePresenter){
                     homePresenter.loadHomeInfoData();
                 }
             }
         });
 
+        homeLoadMoreLayout.addItemDecoration(new SpacesItemDecoration(20));
         //主布局中的布局管理器
         GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                return 2;
+                //表示大数据，热销商品，占2份中的1份，也就是一半
+                if( homeAdapter.getItemViewType(position) == HomeFragment.HOME_RCM_TYPE || homeAdapter.getItemViewType(position)== HomeFragment.HOME_HOT_SALE_TYPE){
+                    return 1;
+                }
+                else {
+                    return 2;
+                }
             }
         });
         homeLoadMoreLayout.setLayoutManager(manager);
@@ -246,7 +331,14 @@ public class HomeFragment extends BaseFragment implements HomeView {
 
     @Override
     public void updateRmdInfo(List<Product> recommends) {
-
+        homeLoadMoreLayout.onLoadSuccess();
+        RecyclerLoadMoreView.setLoadMoreEnable(false);
+        if(null != recommends && recommends.size() > 0){
+            recmdProducts.clear();
+            recmdProducts.addAll(recommends);
+            homeAdapter.updateItemNumByType(HOME_RCM_TYPE);
+            homeAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -256,7 +348,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
 
             String defaultKey = homeData.getDefaultKey();
             if (!TextUtils.isEmpty(defaultKey)) {
-//                searchTv.setText(defaultKey);
+                searchKeyEt.setText(defaultKey);
             }
 
             List<ImgData> slideDatas = homeData.getSlides();
@@ -274,7 +366,23 @@ public class HomeFragment extends BaseFragment implements HomeView {
                 homeAdapter.updateItemNumByType(HomeFragment.HOME_IMG_AD_TYPE);
             }
 
+
+            List<NoticeData> noticeMsgs = homeData.geteMsgs();
+            if(null != noticeMsgs){
+                noticeDatas.clear();
+                noticeDatas.addAll(noticeMsgs);
+                homeAdapter.updateItemNumByType(HomeFragment.HOME_NOTICE_TYPE);
+            }
+
+
+            List<Product> recmdProds = homeData.getRecmdProds();
+            if(null != recmdProds && recmdProds.size() > 0){
+                hotSaleProducts.clear();
+                hotSaleProducts.addAll(recmdProds);
+                homeAdapter.updateItemNumByType(HomeFragment.HOME_HOT_SALE_TYPE);
+            }
             homeAdapter.notifyDataSetChanged();
+            RecyclerLoadMoreView.setLoadMoreEnable(true);
         }
     }
 
