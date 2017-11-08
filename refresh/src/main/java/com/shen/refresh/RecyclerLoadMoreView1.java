@@ -16,9 +16,7 @@ import android.widget.TextView;
 /**
  * Created by jerry shen on 2017/8/2.
  */
-public class RecyclerLoadMoreView extends RecyclerView {
-
-
+public class RecyclerLoadMoreView1 extends RecyclerView {
     private int mItemLastPosition = 0;
     private OnRefreshListener mRefreshListener;
     private boolean mIsExceed;
@@ -28,11 +26,11 @@ public class RecyclerLoadMoreView extends RecyclerView {
     private static final int KEY_LOAD_FAILURE = 2;
     private static final int KEY_LOADING = 3;
 
-    public RecyclerLoadMoreView(Context context) {
+    public RecyclerLoadMoreView1(Context context) {
         this(context, null);
     }
 
-    public RecyclerLoadMoreView(Context context, @Nullable AttributeSet attrs) {
+    public RecyclerLoadMoreView1(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         addOnScrollListener(new OnScrollListener() {
             @Override
@@ -44,7 +42,7 @@ public class RecyclerLoadMoreView extends RecyclerView {
                         int position = ((LinearLayoutManager) layoutManager).findLastCompletelyVisibleItemPosition();
                         if ((getAdapter().getItemCount() - mItemLastPosition - 1 <= position) && !mIsExceed && !mIsLoading) {
                             mIsExceed = true;
-                            if (mRefreshListener != null && loadMoreEnable) {
+                            if (mRefreshListener != null && isLoadMore) {
                                 mIsLoading = true;
                                 loadMoreData();
                                 setLoadItemStart(KEY_LOADING);
@@ -63,7 +61,7 @@ public class RecyclerLoadMoreView extends RecyclerView {
                         int position = lastVisiblePos;
                         if (lastVisiblePos == itemCount - 1 && !mIsExceed && !mIsLoading) {
                             mIsExceed = true;
-                            if (mRefreshListener != null && loadMoreEnable) {
+                            if (mRefreshListener != null && isLoadMore) {
                                 mIsLoading = true;
                                 loadMoreData();
                                 setLoadItemStart(KEY_LOADING);
@@ -113,41 +111,26 @@ public class RecyclerLoadMoreView extends RecyclerView {
         }
     }
 
+    private static boolean isLoadMore = false;
 
-
-    /**
-     * 表示是可以加载更多
-     */
-    private boolean loadMoreEnable = false;
-
-
-    public boolean isLoadMoreEnable() {
-        return loadMoreEnable;
+    public static void setLoadMoreEnable(boolean enable){
+        isLoadMore = enable;
     }
 
-    public  void setLoadMoreEnable(boolean enable){
-        loadMoreEnable = enable;
+    public static boolean canLoadMore(){
+        return  isLoadMore;
     }
 
-    /**
-     * 数据加载成功后进行调用，关闭加载更多布局
-     */
     public void onLoadSuccess() {
         mIsLoading = false;
         setLoadItemStart(KEY_LOAD_SUCCESS);
     }
 
-    /**
-     * 表示数据加载失败，显示失败布局
-     */
     public void onLoadFailure() {
         mIsLoading = false;
         setLoadItemStart(KEY_LOAD_FAILURE);
     }
 
-    /**
-     * 触发加载更多数据
-     */
     private void loadMoreData() {
         mRefreshListener.onRefresh();
         setLoadItemStart(KEY_LOADING);
@@ -170,35 +153,20 @@ public class RecyclerLoadMoreView extends RecyclerView {
         void onRefresh();
     }
 
-    private OnLoadMoreListener onLoadMoreListener;
-
-    public OnLoadMoreListener getOnLoadMoreListener() {
-        return onLoadMoreListener;
-    }
-
-    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
-        this.onLoadMoreListener = onLoadMoreListener;
-    }
-
-
-    public interface OnLoadMoreListener {
-        void onLoadMore();
-    }
-
-    public  abstract class Adapter extends RecyclerView.Adapter {
+    public static abstract class Adapter extends RecyclerView.Adapter {
 
         private static final int KEY_ITEM_TYPE_LOADING = 707001;
-        public  View mLoadingView;
+        public static View mLoadingView;
         private LinearLayout mLoading;
         private TextView mLoaded;
         private OnRefreshListener mRefreshListener;
 
         @Override
         public final ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            if (viewType == KEY_ITEM_TYPE_LOADING && loadMoreEnable) {
+            if (viewType == KEY_ITEM_TYPE_LOADING && isLoadMore) {
                 mLoadingView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_setting_container_loading, parent, false);
                 //mLoadingView = LayoutInflater.from(parent.getContext()).inflate(R.layout.load_more_anim_layout, parent, false);
-                mLoadingView.setOnClickListener(new View.OnClickListener() {
+                mLoadingView.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (mRefreshListener != null) {
@@ -217,7 +185,7 @@ public class RecyclerLoadMoreView extends RecyclerView {
 
         @Override
         public final void onBindViewHolder(ViewHolder holder, int position) {
-            if (getItemViewType(position) == KEY_ITEM_TYPE_LOADING && loadMoreEnable) {
+            if (getItemViewType(position) == KEY_ITEM_TYPE_LOADING && isLoadMore) {
                 ((ViewHolderFromLoading) holder).bindView();
             } else {
                 onBindViewHolderToRecyclerLoadMoreView(holder, position);
@@ -227,7 +195,7 @@ public class RecyclerLoadMoreView extends RecyclerView {
 
         @Override
         public final int getItemCount() {
-            if(loadMoreEnable){
+            if(isLoadMore){
                 return getItemCountToRecyclerLoadMoreView() + 1;
             }
             return getItemCountToRecyclerLoadMoreView();
@@ -236,7 +204,7 @@ public class RecyclerLoadMoreView extends RecyclerView {
 
         @Override
         public final int getItemViewType(int position) {
-            if (position == getItemCountToRecyclerLoadMoreView() && loadMoreEnable) {
+            if (position == getItemCountToRecyclerLoadMoreView() && isLoadMore) {
                 return KEY_ITEM_TYPE_LOADING;
             }
             return getItemViewTypeToRecyclerLoadMoreView(position);
