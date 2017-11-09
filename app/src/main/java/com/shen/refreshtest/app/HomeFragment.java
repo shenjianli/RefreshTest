@@ -296,9 +296,9 @@ public class HomeFragment extends BaseFragment implements HomeView {
                 searchTitleLayout.setBackgroundColor(bgColor);
             }
         });
-        homeLoadMoreLayout.setOnRefreshListener(new RecyclerLoadMoreView.OnRefreshListener() {
+        homeLoadMoreLayout.setOnLoadMoreListener(new RecyclerLoadMoreView.OnLoadMoreListener() {
             @Override
-            public void onRefresh() {
+            public void onLoadMore() {
                 if(null != homePresenter){
                     homePresenter.loadRcmProductInfo();
                 }
@@ -378,7 +378,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
     @Override
     public void updateRmdInfo(List<Product> recommends) {
         homeLoadMoreLayout.onLoadSuccess();
-        RecyclerLoadMoreView.setLoadMoreEnable(false);
+        homeLoadMoreLayout.setLoadMoreEnable(false);
         if(null != recommends && recommends.size() > 0){
             recmdProducts.clear();
             recmdProducts.addAll(recommends);
@@ -428,7 +428,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
                 homeAdapter.updateItemNumByType(HomeFragment.HOME_HOT_SALE_TYPE);
             }
             homeAdapter.notifyDataSetChanged();
-            RecyclerLoadMoreView.setLoadMoreEnable(true);
+            homeLoadMoreLayout.setLoadMoreEnable(true);
         }
     }
 

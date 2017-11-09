@@ -6,11 +6,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+
+
+import static com.shen.refresh.RefreshAdapter.LOAD_MORE_FAILURE;
+import static com.shen.refresh.RefreshAdapter.LOAD_MORE_LOADING;
+import static com.shen.refresh.RefreshAdapter.LOAD_MORE_SUCCESS;
 
 
 /**
@@ -20,13 +20,18 @@ public class RecyclerLoadMoreView extends RecyclerView {
 
 
     private int mItemLastPosition = 0;
-    private OnRefreshListener mRefreshListener;
+    /**
+     * 加载更多监听器
+     */
+    private OnLoadMoreListener onLoadMoreListener;
+
     private boolean mIsExceed;
     private boolean mIsLoading;
-    private Adapter mAdapter;
-    private static final int KEY_LOAD_SUCCESS = 1;
-    private static final int KEY_LOAD_FAILURE = 2;
-    private static final int KEY_LOADING = 3;
+
+    /**
+     * 刷新加载更多适配器
+     */
+    private RefreshAdapter refreshAdapter;
 
     public RecyclerLoadMoreView(Context context) {
         this(context, null);
@@ -44,10 +49,10 @@ public class RecyclerLoadMoreView extends RecyclerView {
                         int position = ((LinearLayoutManager) layoutManager).findLastCompletelyVisibleItemPosition();
                         if ((getAdapter().getItemCount() - mItemLastPosition - 1 <= position) && !mIsExceed && !mIsLoading) {
                             mIsExceed = true;
-                            if (mRefreshListener != null && loadMoreEnable) {
+                            if (onLoadMoreListener != null && loadMoreEnable) {
                                 mIsLoading = true;
                                 loadMoreData();
-                                setLoadItemStart(KEY_LOADING);
+                                setLoadItemStart(LOAD_MORE_LOADING);
                             }
                         }
                         if (getAdapter().getItemCount() - mItemLastPosition - 1 > position) {
@@ -63,10 +68,10 @@ public class RecyclerLoadMoreView extends RecyclerView {
                         int position = lastVisiblePos;
                         if (lastVisiblePos == itemCount - 1 && !mIsExceed && !mIsLoading) {
                             mIsExceed = true;
-                            if (mRefreshListener != null && loadMoreEnable) {
+                            if (onLoadMoreListener != null && loadMoreEnable) {
                                 mIsLoading = true;
                                 loadMoreData();
-                                setLoadItemStart(KEY_LOADING);
+                                setLoadItemStart(LOAD_MORE_LOADING);
                             }
                         }
                         if (getAdapter().getItemCount() - mItemLastPosition - 1 > position) {
@@ -90,43 +95,46 @@ public class RecyclerLoadMoreView extends RecyclerView {
     }
 
     private void setLoadItemStart(int key) {
-        mAdapter = (Adapter) getAdapter();
-        if (mAdapter != null) {
-            mAdapter.setLoadItemStart(key);
-            mAdapter.setOnRefreshListener(new OnRefreshListener() {
+        refreshAdapter = (RefreshAdapter) getAdapter();
+        if (refreshAdapter != null) {
+            refreshAdapter.updateLoadState(key);
+            refreshAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
                 @Override
-                public void onRefresh() {
+                public void onLoadMore() {
                     loadMoreData();
                 }
             });
         }
     }
 
-
-
     @Override
-    public void setAdapter(RecyclerView.Adapter adapter) {
-        if (adapter instanceof Adapter) {
+    public void setAdapter(Adapter adapter) {
+        if (adapter instanceof RefreshAdapter) {
+            refreshAdapter = (RefreshAdapter) adapter;
             super.setAdapter(adapter);
         } else {
             throw new RuntimeException("使用RecyclerLoadMoreView.Adapter");
         }
     }
 
-
-
     /**
      * 表示是可以加载更多
      */
     private boolean loadMoreEnable = false;
 
-
+    /**
+     * 判断是否可以使用加载更多
+     * @return
+     */
     public boolean isLoadMoreEnable() {
         return loadMoreEnable;
     }
 
     public  void setLoadMoreEnable(boolean enable){
         loadMoreEnable = enable;
+        if(null != refreshAdapter){
+            refreshAdapter.setLoadMoreEnable(enable);
+        }
     }
 
     /**
@@ -134,7 +142,18 @@ public class RecyclerLoadMoreView extends RecyclerView {
      */
     public void onLoadSuccess() {
         mIsLoading = false;
-        setLoadItemStart(KEY_LOAD_SUCCESS);
+        updateLoadState(LOAD_MORE_SUCCESS);
+    }
+
+    /**
+     * 更新加载更多状态
+     * @param state 状态值
+     */
+    private void updateLoadState(int state){
+        if(null != refreshAdapter){
+            refreshAdapter.updateLoadState(state);
+        }
+
     }
 
     /**
@@ -142,15 +161,15 @@ public class RecyclerLoadMoreView extends RecyclerView {
      */
     public void onLoadFailure() {
         mIsLoading = false;
-        setLoadItemStart(KEY_LOAD_FAILURE);
+        updateLoadState(LOAD_MORE_FAILURE);
     }
 
     /**
      * 触发加载更多数据
      */
     private void loadMoreData() {
-        mRefreshListener.onRefresh();
-        setLoadItemStart(KEY_LOADING);
+        onLoadMoreListener.onLoadMore();
+        updateLoadState(LOAD_MORE_LOADING);
     }
 
     /**
@@ -162,151 +181,11 @@ public class RecyclerLoadMoreView extends RecyclerView {
         mItemLastPosition = itemLastPosition;
     }
 
-    public void setOnRefreshListener(OnRefreshListener l) {
-        mRefreshListener = l;
-    }
-
-    public interface OnRefreshListener {
-        void onRefresh();
-    }
-
-    private OnLoadMoreListener onLoadMoreListener;
-
-    public OnLoadMoreListener getOnLoadMoreListener() {
-        return onLoadMoreListener;
-    }
-
     public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
         this.onLoadMoreListener = onLoadMoreListener;
     }
 
-
     public interface OnLoadMoreListener {
         void onLoadMore();
     }
-
-    public  abstract class Adapter extends RecyclerView.Adapter {
-
-        private static final int KEY_ITEM_TYPE_LOADING = 707001;
-        public  View mLoadingView;
-        private LinearLayout mLoading;
-        private TextView mLoaded;
-        private OnRefreshListener mRefreshListener;
-
-        @Override
-        public final ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            if (viewType == KEY_ITEM_TYPE_LOADING && loadMoreEnable) {
-                mLoadingView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_setting_container_loading, parent, false);
-                //mLoadingView = LayoutInflater.from(parent.getContext()).inflate(R.layout.load_more_anim_layout, parent, false);
-                mLoadingView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (mRefreshListener != null) {
-                            if (mLoading.getVisibility() == View.GONE && mLoaded.getVisibility() == VISIBLE) {
-                                mRefreshListener.onRefresh();
-                            }
-                        }
-                    }
-                });
-                return new ViewHolderFromLoading(mLoadingView);
-            } else {
-                return onCreateViewHolderToRecyclerLoadMoreView(parent, viewType);
-            }
-        }
-
-
-        @Override
-        public final void onBindViewHolder(ViewHolder holder, int position) {
-            if (getItemViewType(position) == KEY_ITEM_TYPE_LOADING && loadMoreEnable) {
-                ((ViewHolderFromLoading) holder).bindView();
-            } else {
-                onBindViewHolderToRecyclerLoadMoreView(holder, position);
-            }
-        }
-
-
-        @Override
-        public final int getItemCount() {
-            if(loadMoreEnable){
-                return getItemCountToRecyclerLoadMoreView() + 1;
-            }
-            return getItemCountToRecyclerLoadMoreView();
-        }
-
-
-        @Override
-        public final int getItemViewType(int position) {
-            if (position == getItemCountToRecyclerLoadMoreView() && loadMoreEnable) {
-                return KEY_ITEM_TYPE_LOADING;
-            }
-            return getItemViewTypeToRecyclerLoadMoreView(position);
-        }
-
-        /**
-         * 根据不同的类型加载不同的ViewHolder布局
-         * @param parent 父布局
-         * @param viewType 具体的类型
-         * @return 根据viewType返回具体的ViewHolder布局
-         */
-        protected abstract ViewHolder onCreateViewHolderToRecyclerLoadMoreView(ViewGroup parent, int viewType);
-
-        /**
-         * 根据位置索引及ViewHolder布局来进行动态数据绑定
-         * @param holder 布局
-         * @param position 位置索引
-         */
-        protected abstract void onBindViewHolderToRecyclerLoadMoreView(ViewHolder holder, int position);
-
-        /**
-         * 返回列表中数据集合个数
-         * @return 集合大小
-         */
-        protected abstract int getItemCountToRecyclerLoadMoreView();
-
-        /**
-         * 返回指定位置的item类型值
-         * @param position 位置索引
-         * @return 类型值
-         */
-        protected abstract int getItemViewTypeToRecyclerLoadMoreView(int position);
-
-        public void setLoadItemStart(int key) {
-            if (mLoadingView != null) {
-                mLoading = (LinearLayout) mLoadingView.findViewById(R.id.loading);
-                mLoaded = (TextView) mLoadingView.findViewById(R.id.loaded);
-                switch (key) {
-                    case KEY_LOADING:
-                        mLoaded.setVisibility(GONE);
-                        mLoading.setVisibility(VISIBLE);
-                        break;
-                    case KEY_LOAD_SUCCESS:
-                        mLoaded.setVisibility(GONE);
-                        mLoading.setVisibility(GONE);
-                        break;
-                    case KEY_LOAD_FAILURE:
-                        mLoaded.setVisibility(VISIBLE);
-                        mLoading.setVisibility(GONE);
-                        break;
-                }
-            }
-        }
-
-        public void setOnRefreshListener(OnRefreshListener l) {
-            mRefreshListener = l;
-        }
-
-
-    }
-
-    static class ViewHolderFromLoading extends ViewHolder {
-
-        public ViewHolderFromLoading(View itemView) {
-            super(itemView);
-        }
-
-        public void bindView() {
-
-        }
-    }
-
 }

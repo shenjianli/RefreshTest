@@ -1,9 +1,9 @@
 package com.shen.refresh;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
+
 import com.shen.refresh.util.LogUtils;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import java.util.Map;
  * 时间:2017/8/4
  */
 
-public class HomeAdapter extends RecyclerLoadMoreView.Adapter {
+public class HomeAdapter extends RefreshAdapter {
 
     /**
      *用于存储相对位置的type类型数据
