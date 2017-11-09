@@ -18,12 +18,12 @@ import java.util.Map;
  * 时间:2017/8/4
  */
 
-public class HomeAdapter extends RefreshAdapter {
+public class RefreshConentAdapter extends RefreshLoadAdapter {
 
     /**
      *用于存储相对位置的type类型数据
      */
-    private List<HomeBaseData> homeBaseDatas = new ArrayList<>();
+    private List<RefreshData> refreshDatas = new ArrayList<>();
     /**
      *相关类型对应的adapter的map集合
      */
@@ -33,9 +33,9 @@ public class HomeAdapter extends RefreshAdapter {
      */
     private Context context;
 
-    public HomeAdapter(){}
+    public RefreshConentAdapter(){}
 
-    public HomeAdapter(Context context) {
+    public RefreshConentAdapter(Context context) {
         this.context = context;
     }
 
@@ -53,11 +53,11 @@ public class HomeAdapter extends RefreshAdapter {
                 }
                 int count = baseHomeAdapter.getItemCount();
                 if (count > 0) {
-                    HomeBaseData homeBaseData;
+                    RefreshData refreshData;
                     for (int i = 0; i < count; i++) {
-                        homeBaseData = new HomeBaseData();
-                        homeBaseData.setType(type);
-                        homeBaseDatas.add(homeBaseData);
+                        refreshData = new RefreshData();
+                        refreshData.setType(type);
+                        refreshDatas.add(refreshData);
                     }
                     LogUtils.i("新增加" + type + "类型的Item" + count + "项");
                 }
@@ -114,8 +114,8 @@ public class HomeAdapter extends RefreshAdapter {
     @Override
     protected void onBindViewHolderToRecyclerLoadMoreView(RecyclerView.ViewHolder holder, final int position) {
             if (null != baseHomeAdapters) {
-                HomeBaseData homeBaseData = homeBaseDatas.get(position);
-                int viewType = homeBaseData.getType();
+                RefreshData refreshData = refreshDatas.get(position);
+                int viewType = refreshData.getType();
                 int firstIndex = getFirstItemByType(viewType);
                 BaseRecycleAdapter baseHomeAdapter = baseHomeAdapters.get(viewType);
                 //根据位置索引对加入的Adapter进行绑定数据有调用
@@ -134,10 +134,10 @@ public class HomeAdapter extends RefreshAdapter {
      */
     private int getFirstItemByType(int viewType) {
         int index = 0;
-        for (int i = 0; i < homeBaseDatas.size(); i++){
-            HomeBaseData homeBaseData = homeBaseDatas.get(i);
-            if(null != homeBaseData){
-                if(viewType == homeBaseData.getType()){
+        for (int i = 0; i < refreshDatas.size(); i++){
+            RefreshData refreshData = refreshDatas.get(i);
+            if(null != refreshData){
+                if(viewType == refreshData.getType()){
                     index = i;
                     break;
                 }
@@ -148,9 +148,9 @@ public class HomeAdapter extends RefreshAdapter {
 
     @Override
     protected int getItemCountToRecyclerLoadMoreView() {
-        if (homeBaseDatas != null) {
-            if (homeBaseDatas.size() != 0) {
-                return homeBaseDatas.size();
+        if (refreshDatas != null) {
+            if (refreshDatas.size() != 0) {
+                return refreshDatas.size();
             }
         }
         return 0;
@@ -161,8 +161,8 @@ public class HomeAdapter extends RefreshAdapter {
      * @return
      */
     public int getItemNum() {
-        if (null != homeBaseDatas && homeBaseDatas.size() > 0) {
-            return homeBaseDatas.size();
+        if (null != refreshDatas && refreshDatas.size() > 0) {
+            return refreshDatas.size();
         }
         return 0;
     }
@@ -170,8 +170,8 @@ public class HomeAdapter extends RefreshAdapter {
     @Override
     protected int getItemViewTypeToRecyclerLoadMoreView(int position) {
 
-        if (null != homeBaseDatas && homeBaseDatas.size() > 0 && position < homeBaseDatas.size()) {
-            return homeBaseDatas.get(position).getType();
+        if (null != refreshDatas && refreshDatas.size() > 0 && position < refreshDatas.size()) {
+            return refreshDatas.get(position).getType();
         }
         return -1;
 
@@ -184,10 +184,10 @@ public class HomeAdapter extends RefreshAdapter {
      * @return
      */
     public boolean hasItem(int itemType) {
-        if (null != homeBaseDatas) {
-            for (int i = 0; i < homeBaseDatas.size(); i++) {
-                HomeBaseData homeBaseData = homeBaseDatas.get(i);
-                int type = homeBaseData.getType();
+        if (null != refreshDatas) {
+            for (int i = 0; i < refreshDatas.size(); i++) {
+                RefreshData refreshData = refreshDatas.get(i);
+                int type = refreshData.getType();
                 if (itemType == type) {
                     return true;
                 }
@@ -201,15 +201,15 @@ public class HomeAdapter extends RefreshAdapter {
      * @param type 具体类型
      */
     public void removeHomeItemByType(int type) {
-        List<HomeBaseData> deletes = new ArrayList<>();
-        if (null != homeBaseDatas && homeBaseDatas.size() > 0) {
-            for (HomeBaseData homeBaseData : homeBaseDatas) {
-                int itemType = homeBaseData.getType();
+        List<RefreshData> deletes = new ArrayList<>();
+        if (null != refreshDatas && refreshDatas.size() > 0) {
+            for (RefreshData refreshData : refreshDatas) {
+                int itemType = refreshData.getType();
                 if (itemType == type) {
-                    deletes.add(homeBaseData);
+                    deletes.add(refreshData);
                 }
             }
-            homeBaseDatas.removeAll(deletes);
+            refreshDatas.removeAll(deletes);
         }
 
     }
@@ -220,7 +220,7 @@ public class HomeAdapter extends RefreshAdapter {
      */
     public void addHomeItemByType(int type) {
 
-        if (null != homeBaseDatas) {
+        if (null != refreshDatas) {
 
             if (null != baseHomeAdapters) {
                 if(baseHomeAdapters.containsKey(type)){
@@ -229,9 +229,9 @@ public class HomeAdapter extends RefreshAdapter {
                         //需要新增数据的索引
                         int insertIndex = -1;
                         //查的需要新增数据的位置
-                        for (int i = 0; i < homeBaseDatas.size(); i++) {
-                            HomeBaseData homeBaseData = homeBaseDatas.get(i);
-                            int itemType = homeBaseData.getType();
+                        for (int i = 0; i < refreshDatas.size(); i++) {
+                            RefreshData refreshData = refreshDatas.get(i);
+                            int itemType = refreshData.getType();
                             if(itemType == type){
                                 LogUtils.i("集合中已经有" + type + "类型的数据，请调用 updateItemNumByType 进行更新");
                                 return;
@@ -244,15 +244,15 @@ public class HomeAdapter extends RefreshAdapter {
 
                         int count = baseRecycleAdapter.getItemCount();
                         if (count > 0) {
-                            HomeBaseData homeBaseData;
+                            RefreshData refreshData;
                             // 进行新增数据
                             for (int i = 0; i < count; i++) {
-                                homeBaseData = new HomeBaseData();
-                                homeBaseData.setType(type);
+                                refreshData = new RefreshData();
+                                refreshData.setType(type);
                                 if (-1 != insertIndex) {
-                                    homeBaseDatas.add(insertIndex, homeBaseData);
+                                    refreshDatas.add(insertIndex, refreshData);
                                 } else {
-                                    homeBaseDatas.add(homeBaseData);
+                                    refreshDatas.add(refreshData);
                                 }
 
                             }
@@ -279,19 +279,19 @@ public class HomeAdapter extends RefreshAdapter {
                 int hasCount = 0;
                 int count = baseRecycleAdapter.getItemCount();
 
-                if(null != homeBaseDatas){
+                if(null != refreshDatas){
                     //遍历查找需要插入或删除的位置
-                    for(int i= 0; i < homeBaseDatas.size(); i++){
-                        HomeBaseData homeBaseData = homeBaseDatas.get(i);
-                        if(null != homeBaseData){
-                            if(type == homeBaseData.getType()){
+                    for(int i = 0; i < refreshDatas.size(); i++){
+                        RefreshData refreshData = refreshDatas.get(i);
+                        if(null != refreshData){
+                            if(type == refreshData.getType()){
                                 hasCount ++;
                                 if(-1 == firstIndex){
                                     firstIndex = i;
                                 }
                             }
                             //如果剩下的type类型都比要更新大，则可以结束查找
-                            if(homeBaseData.getType() > type){
+                            if(refreshData.getType() > type){
                                 break;
                             }
                         }
@@ -308,9 +308,9 @@ public class HomeAdapter extends RefreshAdapter {
                             }
                             //表示原来有type这一项，只是数目上增多了
                             for (int i = 0; i < updateCnt; i++){
-                                HomeBaseData homeBaseData = new HomeBaseData();
-                                homeBaseData.setType(type);
-                                homeBaseDatas.add(firstIndex,homeBaseData);
+                                RefreshData refreshData = new RefreshData();
+                                refreshData.setType(type);
+                                refreshDatas.add(firstIndex, refreshData);
                             }
                         } //表示原来有type这一项，需要删除，数目上减少
                         else{
@@ -319,12 +319,12 @@ public class HomeAdapter extends RefreshAdapter {
                                 return ;
                             }
 
-                            List<HomeBaseData> deletes = new ArrayList<>();
+                            List<RefreshData> deletes = new ArrayList<>();
                             for (int i = 0; i < -updateCnt; i++){
-                                deletes.add(homeBaseDatas.get(firstIndex + i));
+                                deletes.add(refreshDatas.get(firstIndex + i));
                             }
                             if(deletes.size() > 0){
-                                homeBaseDatas.removeAll(deletes);
+                                refreshDatas.removeAll(deletes);
                             }
                         }
                     }

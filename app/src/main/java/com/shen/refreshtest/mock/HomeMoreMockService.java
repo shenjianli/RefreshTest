@@ -29,7 +29,7 @@ public class HomeMoreMockService extends MockService {
         String resultStr =  new Gson().toJson(result);
         LogUtils.i("获得的json字符串为：" + result);
 
-        SystemClock.sleep(2000);
+        SystemClock.sleep(4000);
 
         //返回json字符串
         return resultStr;

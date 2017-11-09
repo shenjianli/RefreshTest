@@ -11,14 +11,15 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.shen.refresh.HomeAdapter;
+import com.shen.refresh.BaseLoadMoreView;
+import com.shen.refresh.LoadMoreDefaultView;
+import com.shen.refresh.RefreshConentAdapter;
 import com.shen.refresh.RecyclerLoadMoreView;
 import com.shen.refresh.RecyclerRefreshLayout;
 import com.shen.refresh.util.LogUtils;
@@ -43,7 +44,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 
 /**
@@ -80,7 +80,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
 
     private HomePresenter homePresenter;
 
-    private HomeAdapter homeAdapter;
+    private RefreshConentAdapter refreshConentAdapter;
 
     private SlideAdapter slideAdapter;
     private List<ImgData> slideItems;
@@ -138,8 +138,14 @@ public class HomeFragment extends BaseFragment implements HomeView {
         }
         super.onCreateView(inflater,container,savedInstanceState);
         initRefreshLayout();
+        initLoadMoreLayout();
         initHomeView();
         return mHomeView;
+    }
+
+    private void initLoadMoreLayout() {
+        BaseLoadMoreView loadmoreView  = new LoadMoreCustomView();
+        homeLoadMoreLayout.addLoadMoveView(loadmoreView);
     }
 
     private TextView keyTextTv;
@@ -183,7 +189,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
 
         mEvaluator = new ArgbEvaluator();
 
-        homeAdapter = new HomeAdapter();
+        refreshConentAdapter = new RefreshConentAdapter();
 
         slideItems = new ArrayList<>();
         slideAdapter = new SlideAdapter(context, slideItems);
@@ -206,12 +212,12 @@ public class HomeFragment extends BaseFragment implements HomeView {
         recmdProducts = new ArrayList<>();
         recmdAdapter = new RecmdAdapter(context,recmdProducts);
 
-        homeAdapter.addAdapter(slideAdapter);
-        homeAdapter.addAdapter(imgAdAdapter);
-        homeAdapter.addAdapter(noticeAdapter);
-        homeAdapter.addAdapter(hotSaleTitleAdapter);
-        homeAdapter.addAdapter(hotSaleAdapter);
-        homeAdapter.addAdapter(recmdAdapter);
+        refreshConentAdapter.addAdapter(slideAdapter);
+        refreshConentAdapter.addAdapter(imgAdAdapter);
+        refreshConentAdapter.addAdapter(noticeAdapter);
+        refreshConentAdapter.addAdapter(hotSaleTitleAdapter);
+        refreshConentAdapter.addAdapter(hotSaleAdapter);
+        refreshConentAdapter.addAdapter(recmdAdapter);
     }
 
     private EditText searchKeyEt;
@@ -310,8 +316,8 @@ public class HomeFragment extends BaseFragment implements HomeView {
                 //下拉刷新时，先清空大数据推荐
                 if(null != recmdProducts && recmdProducts.size() > 0){
                     recmdProducts.clear();
-                    homeAdapter.updateItemNumByType(HOME_RCM_TYPE);
-                    homeAdapter.notifyDataSetChanged();
+                    refreshConentAdapter.updateItemNumByType(HOME_RCM_TYPE);
+                    refreshConentAdapter.notifyDataSetChanged();
                 }
                 if(null != homePresenter){
                     homePresenter.loadHomeInfoData();
@@ -326,7 +332,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
             @Override
             public int getSpanSize(int position) {
                 //表示大数据，热销商品，占2份中的1份，也就是一半
-                if( homeAdapter.getItemViewType(position) == HomeFragment.HOME_RCM_TYPE || homeAdapter.getItemViewType(position)== HomeFragment.HOME_HOT_SALE_TYPE){
+                if( refreshConentAdapter.getItemViewType(position) == HomeFragment.HOME_RCM_TYPE || refreshConentAdapter.getItemViewType(position)== HomeFragment.HOME_HOT_SALE_TYPE){
                     return 1;
                 }
                 else {
@@ -335,7 +341,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
             }
         });
         homeLoadMoreLayout.setLayoutManager(manager);
-        homeLoadMoreLayout.setAdapter(homeAdapter);
+        homeLoadMoreLayout.setAdapter(refreshConentAdapter);
 
 
     }
@@ -382,8 +388,8 @@ public class HomeFragment extends BaseFragment implements HomeView {
         if(null != recommends && recommends.size() > 0){
             recmdProducts.clear();
             recmdProducts.addAll(recommends);
-            homeAdapter.updateItemNumByType(HOME_RCM_TYPE);
-            homeAdapter.notifyDataSetChanged();
+            refreshConentAdapter.updateItemNumByType(HOME_RCM_TYPE);
+            refreshConentAdapter.notifyDataSetChanged();
         }
     }
 
@@ -402,14 +408,14 @@ public class HomeFragment extends BaseFragment implements HomeView {
             if (slideDatas != null && slideDatas.size() > 0) {
                 slideItems.clear();
                 slideItems.addAll(slideDatas);
-                homeAdapter.updateItemNumByType(HomeFragment.HOME_SLIDE_TYPE);
+                refreshConentAdapter.updateItemNumByType(HomeFragment.HOME_SLIDE_TYPE);
             }
 
             ImgData bigProm = homeData.getBigProm();
             if(null != bigProm){
                 imgAdDatas.clear();
                 imgAdDatas.add(bigProm);
-                homeAdapter.updateItemNumByType(HomeFragment.HOME_IMG_AD_TYPE);
+                refreshConentAdapter.updateItemNumByType(HomeFragment.HOME_IMG_AD_TYPE);
             }
 
 
@@ -417,7 +423,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
             if(null != noticeMsgs){
                 noticeDatas.clear();
                 noticeDatas.addAll(noticeMsgs);
-                homeAdapter.updateItemNumByType(HomeFragment.HOME_NOTICE_TYPE);
+                refreshConentAdapter.updateItemNumByType(HomeFragment.HOME_NOTICE_TYPE);
             }
 
 
@@ -425,9 +431,9 @@ public class HomeFragment extends BaseFragment implements HomeView {
             if(null != recmdProds && recmdProds.size() > 0){
                 hotSaleProducts.clear();
                 hotSaleProducts.addAll(recmdProds);
-                homeAdapter.updateItemNumByType(HomeFragment.HOME_HOT_SALE_TYPE);
+                refreshConentAdapter.updateItemNumByType(HomeFragment.HOME_HOT_SALE_TYPE);
             }
-            homeAdapter.notifyDataSetChanged();
+            refreshConentAdapter.notifyDataSetChanged();
             homeLoadMoreLayout.setLoadMoreEnable(true);
         }
     }

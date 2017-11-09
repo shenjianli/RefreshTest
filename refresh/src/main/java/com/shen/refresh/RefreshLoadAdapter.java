@@ -1,20 +1,13 @@
 package com.shen.refresh;
 
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
 
 /**
  * Created by jerry shen on 2017/11/9.
  */
 
-public abstract class RefreshAdapter extends RecyclerView.Adapter {
+public abstract class RefreshLoadAdapter extends RecyclerView.Adapter {
 
     /**
      * 表示加载更多状态
@@ -46,19 +39,34 @@ public abstract class RefreshAdapter extends RecyclerView.Adapter {
      */
     private boolean loadMoreEnable = false;
 
-    public boolean isLoadMoreEnable() {
-        return loadMoreEnable;
-    }
-
+    /**
+     * 设置加载更多使能状态
+     * @param enable
+     */
     public void setLoadMoreEnable(boolean enable) {
         this.loadMoreEnable = enable;
         notifyDataSetChanged();
     }
 
+    private BaseLoadMoreView baseLoadMoreView;
+
+    public void addLoadMoreViewHolder(BaseLoadMoreView loadMoreViewHolder){
+        if(loadMoreViewHolder instanceof BaseLoadMoreView){
+            this.baseLoadMoreView = loadMoreViewHolder;
+        }
+        else {
+            throw new RuntimeException("传入的类型有误，需要 BaseLoadMoreView 类型");
+        }
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == LOAD_MORE_TYPE && loadMoreEnable) {
-            return new LoadMoreViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.loading_more_default_layout, parent, false));
+            if(baseLoadMoreView == null){
+                baseLoadMoreView = new LoadMoreDefaultView();
+            }
+            baseLoadMoreView.setOnLoadMoreListener(onLoadMoreListener);
+            return baseLoadMoreView.onCreateItemView(parent);
         } else {
             return onCreateViewHolderToRecyclerLoadMoreView(parent, viewType);
         }
@@ -67,7 +75,7 @@ public abstract class RefreshAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(position) == LOAD_MORE_TYPE && loadMoreEnable) {
-            ((LoadMoreViewHolder) holder).bindView(position, currentLoadState);
+            baseLoadMoreView.bindView(holder,position, currentLoadState);
         } else {
             onBindViewHolderToRecyclerLoadMoreView(holder, position);
         }
@@ -121,43 +129,4 @@ public abstract class RefreshAdapter extends RecyclerView.Adapter {
      */
     protected abstract int getItemViewTypeToRecyclerLoadMoreView(int position);
 
-    class LoadMoreViewHolder extends RecyclerView.ViewHolder {
-
-        private LinearLayout mLoading;
-        private TextView mLoaded;
-
-        public LoadMoreViewHolder(View itemView) {
-            super(itemView);
-            mLoading = (LinearLayout) itemView.findViewById(R.id.loading);
-            mLoaded = (TextView) itemView.findViewById(R.id.loaded);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onLoadMoreListener != null) {
-                        if (mLoading.getVisibility() == View.GONE && mLoaded.getVisibility() == VISIBLE) {
-                            onLoadMoreListener.onLoadMore();
-                        }
-                    }
-                }
-            });
-        }
-
-        public void bindView(int position, int loadState) {
-            switch (loadState) {
-                case LOAD_MORE_LOADING:
-                    mLoaded.setVisibility(GONE);
-                    mLoading.setVisibility(VISIBLE);
-                    break;
-                case LOAD_MORE_SUCCESS:
-                    mLoaded.setVisibility(GONE);
-                    mLoading.setVisibility(GONE);
-                    break;
-                case LOAD_MORE_FAILURE:
-                    mLoaded.setVisibility(VISIBLE);
-                    mLoading.setVisibility(GONE);
-                    break;
-            }
-        }
-    }
 }

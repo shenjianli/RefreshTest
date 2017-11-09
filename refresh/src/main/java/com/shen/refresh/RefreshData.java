@@ -4,7 +4,7 @@ package com.shen.refresh;
  * Created by ljq on 2017/10/26.
  */
 
-public class HomeBaseData{
+public class RefreshData {
 
     private int type;
 
