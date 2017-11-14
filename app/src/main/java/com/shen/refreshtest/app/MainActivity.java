@@ -43,13 +43,13 @@ public class MainActivity extends AppCompatActivity implements HomeView {
         homePresenter.attachView(this);
     }
 
-    private HomeFragment homeFragment;
+    private HomeFragment1 homeFragment;
     private final String HOME_INDEX_STR = "1";
     private void showDefaultFragment() {
-        homeFragment = (HomeFragment) getSupportFragmentManager()
+        homeFragment = (HomeFragment1) getSupportFragmentManager()
                 .findFragmentByTag(HOME_INDEX_STR);
         if (null == homeFragment) {
-            homeFragment = HomeFragment.newInstance(HOME_INDEX_STR);
+            homeFragment = HomeFragment1.newInstance(HOME_INDEX_STR);
         }
         getSupportFragmentManager()
                 .beginTransaction()

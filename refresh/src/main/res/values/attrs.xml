@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="refresh_style">
+        <attr name="refresh_pull_down_text" format="string"></attr>
+        <attr name="refresh_release_text" format="string"></attr>
+        <attr name="refresh_key_text" format="string"></attr>
+        <attr name="refresh_enable" format="boolean"></attr>
+    </declare-styleable>
+
+
+    <declare-styleable name="load_style">
+        <attr name="load_more_text" format="string"></attr>
+        <attr name="load_more_enable" format="boolean"></attr>
+    </declare-styleable>
+
+</resources>
