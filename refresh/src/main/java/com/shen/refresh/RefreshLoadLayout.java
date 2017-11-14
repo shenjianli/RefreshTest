@@ -50,6 +50,8 @@ public class RefreshLoadLayout extends RelativeLayout {
         boolean loadEnable = typedArray.getBoolean(R.styleable.load_style_load_more_enable, true);
         loadMoreLayout.setLoadMoreEnable(loadEnable);
 
+        float dimension = typedArray.getDimension(R.styleable.refresh_style_refresh_text_marginTop, 10);
+        refreshPullLayout.setRefreshTextMarginTop(dimension);
 
 //        hSpace = t.getDimensionPixelSize(R.styleable.rainbowbar_rainbowbar_hspace, hSpace);
 //        vSpace = t.getDimensionPixelOffset(R.styleable.rainbowbar_rainbowbar_vspace, vSpace);

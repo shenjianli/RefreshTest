@@ -33,6 +33,11 @@ public class RecyclerRefreshLayout extends RelativeLayout {
      * 表示刷新状态，默认为NONE
      */
     private REFRESH_STATE refreshState = REFRESH_NONE;
+    private float refreshTextMarginTop;
+
+    public void setRefreshTextMarginTop(float refreshTextMarginTop) {
+        this.refreshTextMarginTop = refreshTextMarginTop;
+    }
 
     public enum REFRESH_STATE {
         PULL_TO_REFRESH, RELEASE_TO_REFRESH, REFRESHING, REFRESH_NONE

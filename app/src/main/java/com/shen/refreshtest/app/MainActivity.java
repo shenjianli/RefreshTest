@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements HomeView {
                 .replace(R.id.main_content, homeFragment,
                         String.valueOf(HOME_INDEX_STR))
                 .commit();
-
+        log.setText(homeFragment.getClass().getSimpleName());
     }
 
 

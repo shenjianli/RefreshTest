@@ -3,6 +3,7 @@
 
     <declare-styleable name="refresh_style">
         <attr name="refresh_pull_down_text" format="string"></attr>
+        <attr name="refresh_text_marginTop" format="dimension"></attr>
         <attr name="refresh_release_text" format="string"></attr>
         <attr name="refresh_key_text" format="string"></attr>
         <attr name="refresh_enable" format="boolean"></attr>
