@@ -1,11 +1,9 @@
 package com.shen.refreshtest.app;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.shen.netclient.util.LogUtils;
@@ -21,18 +19,14 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity implements HomeView {
+public class CustomActivity extends AppCompatActivity implements HomeView {
 
     @Bind(R.id.log)
     TextView log;
-    @Bind(R.id.main_normal)
-    Button mainNormal;
-    @Bind(R.id.main_custom)
-    Button mainCustom;
-    @Bind(R.id.main_content)
-    FrameLayout mainContent;
-
+    @Bind(R.id.test)
+    Button mTest;
     private HomePresenter homePresenter;
+
 
 
     @Override
@@ -51,7 +45,6 @@ public class MainActivity extends AppCompatActivity implements HomeView {
 
     private HomeFragment1 homeFragment;
     private final String HOME_INDEX_STR = "1";
-
     private void showDefaultFragment() {
         homeFragment = (HomeFragment1) getSupportFragmentManager()
                 .findFragmentByTag(HOME_INDEX_STR);
@@ -67,6 +60,16 @@ public class MainActivity extends AppCompatActivity implements HomeView {
     }
 
 
+    @OnClick({R.id.test})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.test:
+                homePresenter.loadRcmProductInfo();
+                break;
+            default:
+                break;
+        }
+    }
 
     @Override
     public void updateRmdInfo(List<Product> recommends) {
@@ -106,16 +109,5 @@ public class MainActivity extends AppCompatActivity implements HomeView {
             homePresenter = null;
         }
         ButterKnife.unbind(this);
-    }
-
-    @OnClick({R.id.main_normal, R.id.main_custom})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.main_normal:
-                Intent intent = new Intent(this,)
-                break;
-            case R.id.main_custom:
-                break;
-        }
     }
 }
