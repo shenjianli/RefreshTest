@@ -2,6 +2,7 @@ package com.shen.refresh;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.ViewGroup;
 
 import com.shen.refresh.util.LogUtils;
@@ -16,6 +17,19 @@ import java.util.Map;
  * Created by Administrator on 2017/8/4.
  * 包名:com.young.jdmall.ui.adapter
  * 时间:2017/8/4
+ *
+ * getItemViewType(获取显示类型，返回值可在onCreateViewHolder中拿到，以决定加载哪种ViewHolder)
+
+ * onCreateViewHolder(加载ViewHolder的布局)
+
+ * onViewAttachedToWindow（当Item进入这个页面的时候调用）
+
+ * onBindViewHolder(将数据绑定到布局上，以及一些逻辑的控制就写这啦)
+
+ * onViewDetachedFromWindow（当Item离开这个页面的时候调用）
+
+ * onViewRecycled(当Item被回收的时候调用)
+ *
  */
 
 public class RefreshConentAdapter extends RefreshLoadAdapter {
@@ -28,6 +42,10 @@ public class RefreshConentAdapter extends RefreshLoadAdapter {
      *相关类型对应的adapter的map集合
      */
     private Map<Integer, BaseRecycleAdapter> baseHomeAdapters = new HashMap<>();
+
+
+    private Map<String,BaseRecycleAdapter> holderTypeMap = new HashMap<>();
+
     /**
      *创建的上下文
      */
@@ -104,7 +122,16 @@ public class RefreshConentAdapter extends RefreshLoadAdapter {
                 BaseRecycleAdapter baseHomeAdapter = baseHomeAdapters.get(viewType);
                 //根据viewType调用加入的adapter的创建指定布局的方法
                 if (null != baseHomeAdapter) {
-                    return baseHomeAdapter.onCreateViewHolder(parent, viewType);
+                    RecyclerView.ViewHolder homeViewHolder = baseHomeAdapter.onCreateViewHolder(parent, viewType);
+
+                    String holderName = homeViewHolder.getClass().getName();
+
+                    if(!holderTypeMap.containsKey(holderName)){
+                        holderTypeMap.put(homeViewHolder.getClass().getName(),baseHomeAdapter);
+                    }
+
+                    return homeViewHolder;
+
                 }
             }
 //        }
@@ -120,19 +147,57 @@ public class RefreshConentAdapter extends RefreshLoadAdapter {
                 BaseRecycleAdapter baseHomeAdapter = baseHomeAdapters.get(viewType);
                 //根据位置索引对加入的Adapter进行绑定数据有调用
                 if (null != baseHomeAdapter) {
+                    long time = System.currentTimeMillis();
+                    baseHomeAdapter.setScrolling(isScrolling());
                     baseHomeAdapter.onBindViewHolder(holder, position - firstIndex);
+                    LogUtils.i("类型：" + viewType  + "，进行数据绑定");
+                    LogUtils.i(viewType + "耗时：" +  (System.currentTimeMillis() - time));
                 }
+
             }
 //        }
     }
 
+    /**
+     * 当Item进入这个页面的时候调用
+     */
+    @Override
+    public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        String holderKey = holder.getClass().getName();
+        if(!TextUtils.isEmpty(holderKey)){
+            if(null != holderTypeMap && holderTypeMap.size() > 0){
+                BaseRecycleAdapter recycleAdapter = holderTypeMap.get(holderKey);
+                if(null != recycleAdapter){
+                    recycleAdapter.onViewAttachedToWindow(holder);
+                    LogUtils.i(holderKey + " 正在进入视野...");
+                }
+            }
+        }
+    }
+
+
+    @Override
+    public void onViewRecycled(RecyclerView.ViewHolder holder) {
+        super.onViewRecycled(holder);
+        String holderKey = holder.getClass().getName();
+        if(!TextUtils.isEmpty(holderKey)){
+            if(null != holderTypeMap && holderTypeMap.size() > 0){
+                BaseRecycleAdapter recycleAdapter = holderTypeMap.get(holderKey);
+                if(null != recycleAdapter){
+                    recycleAdapter.onViewRecycled(holder);
+                    LogUtils.i(holderKey + " 正在进行回收...");
+                }
+            }
+        }
+    }
 
     /**
      * 根据类型值返回该类型第一项值的位置索引
      * @param viewType 具体的类型
      * @return 返回位置索引
      */
-    private int getFirstItemByType(int viewType) {
+    public int getFirstItemByType(int viewType) {
         int index = 0;
         for (int i = 0; i < refreshDatas.size(); i++){
             RefreshData refreshData = refreshDatas.get(i);
@@ -314,11 +379,12 @@ public class RefreshConentAdapter extends RefreshLoadAdapter {
                             }
                         } //表示原来有type这一项，需要删除，数目上减少
                         else{
+                            //表示要删除所有所有类型项
                             if(hasCount > 0 && count == 0){
                                 removeHomeItemByType(type);
                                 return ;
                             }
-
+							//表示删除原来项中-updateCnt项
                             List<RefreshData> deletes = new ArrayList<>();
                             for (int i = 0; i < -updateCnt; i++){
                                 deletes.add(refreshDatas.get(firstIndex + i));

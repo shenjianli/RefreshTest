@@ -8,6 +8,8 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 
 
+import com.shen.refresh.util.LogUtils;
+
 import static com.shen.refresh.RefreshLoadAdapter.LOAD_MORE_FAILURE;
 import static com.shen.refresh.RefreshLoadAdapter.LOAD_MORE_LOADING;
 import static com.shen.refresh.RefreshLoadAdapter.LOAD_MORE_SUCCESS;
@@ -193,6 +195,16 @@ public class RecyclerLoadMoreView extends RecyclerView {
      * recyclerview 滚动监听类
      */
     private class RefreshLoadScrollListener extends OnScrollListener {
+
+
+        /**
+         * 表示本次垂直方向移动距离
+         */
+        private int moveY = 0;
+        private boolean isSettling = false;
+
+
+
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
@@ -242,10 +254,42 @@ public class RecyclerLoadMoreView extends RecyclerView {
                     }
                 }
             }
+
+            moveY += dy;
         }
 
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);if (newState == SCROLL_STATE_IDLE ) { // 滚动静止时才加载图片资源，极大提升流畅度
+
+                if (isSettling){
+                    if(moveY < 0){
+                        moveY = - moveY;
+                    }
+                    if(null != refreshLoadAdapter && moveY > 100){
+                        refreshLoadAdapter.setScrolling(false);
+                        refreshLoadAdapter.notifyDataSetChanged();
+                        LogUtils.i("停下来进行刷新");
+                    }
+                    isSettling = false;
+                }
+                LogUtils.i("本次移动距离：" + moveY);
+                moveY = 0;
+            }
+            else if(newState == SCROLL_STATE_DRAGGING){
+                if(null != refreshLoadAdapter){
+                    refreshLoadAdapter.setScrolling(false);
+                }
+                LogUtils.i("正在拖拽");
+                isSettling = false;
+            }
+            else if(newState == SCROLL_STATE_SETTLING){
+                if(null != refreshLoadAdapter){
+                    refreshLoadAdapter.setScrolling(true);
+                }
+                isSettling = true;
+                LogUtils.i("正在释放滚动");
+            }
             super.onScrollStateChanged(recyclerView, newState);
         }
     }

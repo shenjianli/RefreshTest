@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 public abstract class BaseRecycleAdapter {
 
+    private boolean isScrolling = false;
 
     public abstract RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType);
 
@@ -19,4 +20,28 @@ public abstract class BaseRecycleAdapter {
 
     public abstract int getItemViewType();
 
+    public boolean isScrolling() {
+        return isScrolling;
+    }
+
+    public void setScrolling(boolean scrolling) {
+        isScrolling = scrolling;
+    }
+
+
+    /**
+     * 当Item进入这个页面的时候调用
+     * @param holder
+     */
+    public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
+
+    }
+
+    /**
+     * 当Item被回收的时候调用
+     * @param holder
+     */
+    public void onViewRecycled(RecyclerView.ViewHolder holder) {
+
+    }
 }

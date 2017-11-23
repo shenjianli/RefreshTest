@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:refresh="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+   <com.shen.refresh.RefreshLoadLayout
+       android:id="@+id/home_refresh_load_layout"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       refresh:refresh_enable="true"
+       refresh:load_more_enable="true">
+   </com.shen.refresh.RefreshLoadLayout>
+
+
+    <include
+        android:id="@+id/home_search_title_layout"
+        layout="@layout/home_search_title_layout"/>
+
+</RelativeLayout>

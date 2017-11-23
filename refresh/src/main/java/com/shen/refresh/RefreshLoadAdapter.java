@@ -18,6 +18,8 @@ public abstract class RefreshLoadAdapter extends RecyclerView.Adapter {
 
     private int currentLoadState = LOAD_MORE_LOADING;
 
+    private boolean isScrolling = false;
+
     private RecyclerLoadMoreView.OnLoadMoreListener  onLoadMoreListener;
 
     public void setOnLoadMoreListener(RecyclerLoadMoreView.OnLoadMoreListener onLoadMoreListener) {
@@ -95,6 +97,15 @@ public abstract class RefreshLoadAdapter extends RecyclerView.Adapter {
             return LOAD_MORE_TYPE;
         }
         return getItemViewTypeToRecyclerLoadMoreView(position);
+    }
+
+
+    public boolean isScrolling() {
+        return isScrolling;
+    }
+
+    public void setScrolling(boolean scrolling) {
+        isScrolling = scrolling;
     }
 
     /**

@@ -208,6 +208,7 @@ public class RecyclerRefreshLayout extends RelativeLayout {
          */
         if (!refreshEnable) {
             return false;
+
         }
         /**
          * 表示正在刷新不处理

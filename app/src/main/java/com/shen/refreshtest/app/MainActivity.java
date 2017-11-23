@@ -21,7 +21,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity implements HomeView {
+public class MainActivity extends AppCompatActivity{
 
     @Bind(R.id.log)
     TextView log;
@@ -31,8 +31,6 @@ public class MainActivity extends AppCompatActivity implements HomeView {
     Button mainCustom;
     @Bind(R.id.main_content)
     FrameLayout mainContent;
-
-    private HomePresenter homePresenter;
 
 
     @Override
@@ -45,14 +43,14 @@ public class MainActivity extends AppCompatActivity implements HomeView {
     }
 
     private void initData() {
-        homePresenter = new HomePresenter();
-        homePresenter.attachView(this);
+
     }
 
     private HomeFragment1 homeFragment;
     private final String HOME_INDEX_STR = "1";
 
     private void showDefaultFragment() {
+
         homeFragment = (HomeFragment1) getSupportFragmentManager()
                 .findFragmentByTag(HOME_INDEX_STR);
         if (null == homeFragment) {
@@ -68,43 +66,11 @@ public class MainActivity extends AppCompatActivity implements HomeView {
 
 
 
-    @Override
-    public void updateRmdInfo(List<Product> recommends) {
-        LogUtils.i("收到首页--大数据---请求的数据：" + recommends.toString());
-    }
 
-    @Override
-    public void updateHomeInfo(HomeData homeData) {
-        LogUtils.i("收到首页请求的数据：" + homeData.toString());
-    }
-
-    @Override
-    public void updateHomeError(int type) {
-
-    }
-
-    @Override
-    public void startLoading(int type) {
-
-    }
-
-    @Override
-    public void hideLoading(int type) {
-
-    }
-
-    @Override
-    public void showError(int type, String msg) {
-
-    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (null != homePresenter) {
-            homePresenter.detachView();
-            homePresenter = null;
-        }
         ButterKnife.unbind(this);
     }
 
@@ -112,9 +78,12 @@ public class MainActivity extends AppCompatActivity implements HomeView {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.main_normal:
-                Intent intent = new Intent(this,)
+                Intent intent = new Intent(this,NormalActivity.class);
+                startActivity(intent);
                 break;
             case R.id.main_custom:
+                Intent customActivity = new Intent(this,CustomActivity.class);
+                startActivity(customActivity);
                 break;
         }
     }

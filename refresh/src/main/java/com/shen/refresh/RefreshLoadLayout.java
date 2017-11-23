@@ -241,6 +241,12 @@ public class RefreshLoadLayout extends RelativeLayout {
         return loadMoreLayout;
     }
 
+    public void addRefreshLayout(View refreshHeaderLayout) {
+        if(null != refreshPullLayout){
+            refreshPullLayout.addRefreshLayout(refreshHeaderLayout);
+        }
+    }
+
 
     public interface OnRefreshActionListener {
         /**

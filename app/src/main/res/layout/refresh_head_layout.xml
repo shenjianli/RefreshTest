@@ -55,7 +55,7 @@
                 android:id="@+id/refresh_key_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="shen----让购物更健康"
+                android:text="自定义----让购物更健康"
                 android:textSize="14sp" />
 
             <TextView
@@ -63,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:text="shen----下拉刷新..."
+                android:text="自定义----下拉刷新..."
                 android:textSize="10sp" />
 
         </LinearLayout>
