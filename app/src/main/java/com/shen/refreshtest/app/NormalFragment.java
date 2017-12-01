@@ -101,8 +101,8 @@ public class NormalFragment extends BaseFragment implements HomeView {
     //上拉透明效果变量
     private int mSumY = 0;
     private float mDistance = 200;  //控制透明度在距离150px的变化
-    private int startValue = 0x50436EEE;
-    private int endValue = 0xff436EEE;
+    private int startValue = 0x50FF4081;
+    private int endValue = 0xffFF4081;
     private int bgColor;
     private ArgbEvaluator mEvaluator;
 
@@ -248,13 +248,13 @@ public class NormalFragment extends BaseFragment implements HomeView {
                 } else if (toTop >= mDistance) {
                     bgColor = endValue;
                     statusAlpha = 255;
-                    searchTitleLayout.setBackgroundResource(R.color.colorAccent);
+                    searchTitleLayout.setBackgroundColor(bgColor);
                 } else {
-                    searchTitleLayout.setBackgroundResource(R.color.colorAccent);
                     bgColor = (int) mEvaluator.evaluate(toTop / mDistance, startValue, endValue);
                     statusAlpha = 255;
+                    searchTitleLayout.setBackgroundColor(bgColor);
                 }
-                searchTitleLayout.setBackgroundColor(bgColor);
+
                 homeStatusBarView.getBackground().setAlpha(statusAlpha);
             }
         });

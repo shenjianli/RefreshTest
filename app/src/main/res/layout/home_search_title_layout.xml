@@ -4,7 +4,6 @@
     android:id="@+id/top_container"
     android:orientation="horizontal"
     android:padding="6dp"
-    android:background="#70ff0000"
     android:layout_width="match_parent"
     android:gravity="center"
     android:layout_height="48dp"
