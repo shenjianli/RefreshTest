@@ -282,7 +282,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
                 mSumY += dy;
                 //LogUtils.i("距离顶部距离：" + mSumY);
 //                if (mSumY <= 5) {
-//                    //searchTitleLayout.setBackgroundResource(R.drawable.titlebackimage);
+//                    //searchTitleLayout.setBackgroundResource(R.drawable.home_title_bg);
 //                } else if (mSumY > 5 && mSumY < 220) {
 //                    //leLayout.setBackgroundResource(R.color.title_bg);
 //                    searchTitleLayout.getBackground().setAlpha(mSumY);

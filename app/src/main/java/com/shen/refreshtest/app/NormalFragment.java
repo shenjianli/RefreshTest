@@ -121,13 +121,9 @@ public class NormalFragment extends BaseFragment implements HomeView {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mHomeView = inflater.inflate(R.layout.fragment_normal, container, false);
         ButterKnife.bind(this, mHomeView);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getActivity().getWindow().setStatusBarColor(0xAA000000);
-        }
-
         super.onCreateView(inflater, container, savedInstanceState);
         initHomeView();
+        initStatusBarView();
         return mHomeView;
     }
 
@@ -187,6 +183,14 @@ public class NormalFragment extends BaseFragment implements HomeView {
 
     private EditText searchKeyEt;
 
+
+    private int statusAlpha = 0;
+    private View homeStatusBarView;
+
+    private void initStatusBarView() {
+        homeStatusBarView = mHomeView.findViewById(R.id.home_default_status_bar);
+        homeStatusBarView.getBackground().setAlpha(statusAlpha);
+    }
     @Override
     public void initView() {
 
@@ -202,6 +206,7 @@ public class NormalFragment extends BaseFragment implements HomeView {
                 } else {
                     searchTitleLayout.setVisibility(View.VISIBLE);
                 }
+
             }
 
             @Override
@@ -238,12 +243,19 @@ public class NormalFragment extends BaseFragment implements HomeView {
             public void onScrollToTop(int toTop) {
                 if (toTop <= 0) {
                     bgColor = startValue;
+                    statusAlpha = 0;
+                    searchTitleLayout.setBackgroundResource(R.color.transparent);
                 } else if (toTop >= mDistance) {
                     bgColor = endValue;
+                    statusAlpha = 255;
+                    searchTitleLayout.setBackgroundResource(R.color.colorAccent);
                 } else {
+                    searchTitleLayout.setBackgroundResource(R.color.colorAccent);
                     bgColor = (int) mEvaluator.evaluate(toTop / mDistance, startValue, endValue);
+                    statusAlpha = 255;
                 }
                 searchTitleLayout.setBackgroundColor(bgColor);
+                homeStatusBarView.getBackground().setAlpha(statusAlpha);
             }
         });
        homeRefreshLoadLayout.setOnLoadActionListener(new RefreshLoadLayout.OnLoadActionListener() {
@@ -287,6 +299,11 @@ public class NormalFragment extends BaseFragment implements HomeView {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         if (null != homePresenter) {
             homePresenter.detachView();
             homePresenter = null;

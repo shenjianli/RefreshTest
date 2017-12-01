@@ -13,9 +13,17 @@
        refresh:load_more_enable="true">
    </com.shen.refresh.RefreshLoadLayout>
 
+    <include
+        android:id="@+id/home_default_status_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/status_bar_view_height"
+        layout="@layout/main_page_default_status_bar"/>
 
     <include
         android:id="@+id/home_search_title_layout"
-        layout="@layout/home_search_title_layout"/>
+        android:layout_width="match_parent"
+        android:layout_height="48dip"
+        layout="@layout/home_search_title_layout"
+        android:layout_below="@id/home_default_status_bar"/>
 
 </RelativeLayout>
