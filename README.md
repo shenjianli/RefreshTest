@@ -3,7 +3,7 @@
 ## 商城中使用的下拉刷新，上拉加载构件
 
 ### 有图有真相
-
+![默认下拉刷新上拉加载](img/default_refresh_load.gif)
 ### xml布局引入
 ```
  <com.shen.refresh.RefreshLoadLayout
