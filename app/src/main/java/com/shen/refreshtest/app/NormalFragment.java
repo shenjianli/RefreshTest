@@ -298,6 +298,9 @@ public class NormalFragment extends BaseFragment implements HomeView {
            }
        });
 
+        /**
+         * 对首页不同的模块添加不同的分割线
+         */
         homeRefreshLoadLayout.addItemDecoration(new SpacesItemDecoration());
         //主布局中的布局管理器
         GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
