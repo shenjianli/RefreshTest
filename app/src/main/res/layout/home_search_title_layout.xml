@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/top_container"
     android:orientation="horizontal"
     android:padding="6dp"
     android:layout_width="match_parent"
     android:gravity="center"
-    android:layout_height="48dp"
-    tools:showIn="@layout/fragment_home">
+    android:layout_height="48dp">
 
     <TextView
         android:id="@+id/ib_sweep"

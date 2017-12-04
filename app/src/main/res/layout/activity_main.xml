@@ -28,17 +28,9 @@
         android:text="自定义"
         />
 
-    <Button
-        android:id="@+id/main_test"
-        android:layout_below="@id/main_custom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="测试"
-        />
-
     <FrameLayout
         android:id="@+id/main_content"
-        android:layout_below="@id/main_test"
+        android:layout_below="@id/main_custom"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </FrameLayout>

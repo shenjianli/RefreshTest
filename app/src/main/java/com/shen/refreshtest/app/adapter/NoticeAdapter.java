@@ -1,6 +1,5 @@
 package com.shen.refreshtest.app.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,17 +9,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shen.refresh.BaseRecycleAdapter;
+import com.shen.refreshtest.Constants;
 import com.shen.refreshtest.R;
-import com.shen.refreshtest.app.HomeFragment;
 import com.shen.refreshtest.core.NoticeView;
 import com.shen.refreshtest.model.NoticeData;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
-
+ * 快讯模块adapter
  */
 public class NoticeAdapter extends BaseRecycleAdapter {
 
@@ -32,16 +30,26 @@ public class NoticeAdapter extends BaseRecycleAdapter {
         this.noticeDatas = noticeDatas;
     }
 
-
+    /**
+     * 创建快讯view holder
+     * @param parent
+     * @param viewType 指定的类型
+     * @return
+     */
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == HomeFragment.HOME_NOTICE_TYPE){
+        if (viewType == Constants.HOME_NOTICE_TYPE){
             return new NoticeHolder(
                     LayoutInflater.from(context).inflate(R.layout.view_notice, parent, false));
         }
         return null;
     }
 
+    /**
+     * 进行快讯数据绑定
+     * @param holder
+     * @param position 表示此类型的位置索引
+     */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(null != noticeDatas){
@@ -73,12 +81,19 @@ public class NoticeAdapter extends BaseRecycleAdapter {
         return 0;
     }
 
+    /**
+     * 返回快讯类型值
+     * @return
+     */
     @Override
     public int getItemViewType() {
-        return HomeFragment.HOME_NOTICE_TYPE;
+        return Constants.HOME_NOTICE_TYPE;
     }
 
-
+    /**
+     * 获取需要显示的快讯文字集合
+     * @return
+     */
     public List<String> getNotices() {
         List<String> notices = new ArrayList<>();
         if(null != noticeDatas){
@@ -89,6 +104,9 @@ public class NoticeAdapter extends BaseRecycleAdapter {
         return notices;
     }
 
+    /**
+     * 快讯view holder
+     */
     static class NoticeHolder extends RecyclerView.ViewHolder{
         RelativeLayout noticeViewLayout;
         NoticeView noticeView;

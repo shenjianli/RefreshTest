@@ -9,12 +9,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shen.refresh.BaseRecycleAdapter;
+import com.shen.refreshtest.Constants;
 import com.shen.refreshtest.R;
 import com.shen.refreshtest.app.HomeFragment;
 
 
 /**
-
+ * 热销标题模块的adapter
  */
 public class HotSaleTitleAdapter extends BaseRecycleAdapter {
 
@@ -27,15 +28,26 @@ public class HotSaleTitleAdapter extends BaseRecycleAdapter {
         this.title = title;
     }
 
+    /**
+     * 创建热销标题viewholder
+     * @param parent
+     * @param viewType 指定的类型
+     * @return
+     */
     @Override
     public TitleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == HomeFragment.HOME_HOT_SALE_TITLE_TYPE){
+        if (viewType == Constants.HOME_HOT_SALE_TITLE_TYPE){
             return new TitleViewHolder(
                     LayoutInflater.from(context).inflate(R.layout.item_hot_sale_title_layout, parent, false));
         }
         return null;
     }
 
+    /**
+     * 设置标题值
+     * @param holder
+     * @param position 表示此类型的位置索引
+     */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof TitleViewHolder){
@@ -44,9 +56,13 @@ public class HotSaleTitleAdapter extends BaseRecycleAdapter {
 
     }
 
+    /**
+     * 返回热销标题的类型值
+     * @return
+     */
     @Override
     public int getItemViewType() {
-        return HomeFragment.HOME_HOT_SALE_TITLE_TYPE;
+        return Constants.HOME_HOT_SALE_TITLE_TYPE;
     }
 
     @Override
@@ -54,6 +70,9 @@ public class HotSaleTitleAdapter extends BaseRecycleAdapter {
         return 1;
     }
 
+    /**
+     * 热销标题的viewholder
+     */
     public static class TitleViewHolder extends RecyclerView.ViewHolder {
 
         private RelativeLayout sumLayout;

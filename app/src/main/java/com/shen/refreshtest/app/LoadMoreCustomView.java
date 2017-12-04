@@ -22,13 +22,23 @@ import static com.shen.refresh.RefreshLoadAdapter.LOAD_MORE_SUCCESS;
 
 public class LoadMoreCustomView extends BaseLoadMoreView {
 
-
+    /**
+     * 创建自定义加载更多view holder
+     * @param parent
+     * @return
+     */
     @Override
     public RecyclerView.ViewHolder onCreateItemView(ViewGroup parent) {
         LoadMoreViewHolder loadMoreHolder = new LoadMoreViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.loading_more_custom_layout, parent, false));
         return loadMoreHolder;
     }
 
+    /**
+     * 根据加载更多状态来更新显示布局
+     * @param holder
+     * @param position
+     * @param loadState
+     */
     public void bindView(final RecyclerView.ViewHolder holder, int position, int loadState) {
         if( holder instanceof LoadMoreViewHolder){
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -59,6 +69,9 @@ public class LoadMoreCustomView extends BaseLoadMoreView {
 
     }
 
+    /**
+     * 自定义加载更多view holder
+     */
     static class LoadMoreViewHolder extends RecyclerView.ViewHolder {
 
         LinearLayout mLoading;

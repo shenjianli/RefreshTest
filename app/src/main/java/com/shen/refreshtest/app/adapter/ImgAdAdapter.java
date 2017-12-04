@@ -14,6 +14,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import com.shen.refresh.BaseRecycleAdapter;
 import com.shen.refresh.util.LogUtils;
+import com.shen.refreshtest.Constants;
 import com.shen.refreshtest.R;
 import com.shen.refreshtest.app.HomeFragment;
 import com.shen.refreshtest.model.ImgData;
@@ -21,28 +22,38 @@ import com.shen.refreshtest.model.ImgData;
 import java.util.List;
 
 /**
-
+ * 图片广告模块的adapter
  */
 public class ImgAdAdapter extends BaseRecycleAdapter {
 
     private Context context;
     private List<ImgData> imgAdItems;
-    private String ref;
 
     public ImgAdAdapter(Context context, List<ImgData> imgAdItems){
         this.context = context;
         this.imgAdItems = imgAdItems;
     }
 
+    /**
+     * 创建图片广告的的viewholder
+     * @param parent
+     * @param viewType 指定的类型
+     * @return
+     */
     @Override
     public ImgAdHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == HomeFragment.HOME_IMG_AD_TYPE){
+        if (viewType == Constants.HOME_IMG_AD_TYPE){
             return new ImgAdHolder(
                     LayoutInflater.from(context).inflate(R.layout.view_image_ad, parent, false));
         }
         return null;
     }
 
+    /**
+     * 对view holder 进行数据绑定
+     * @param holder
+     * @param position 表示此类型的位置索引
+     */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ImgAdHolder) {
@@ -61,7 +72,6 @@ public class ImgAdAdapter extends BaseRecycleAdapter {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
                         LogUtils.i("点击地址：" + imgAction);
                     }
                 });
@@ -77,10 +87,12 @@ public class ImgAdAdapter extends BaseRecycleAdapter {
 
     @Override
     public int getItemViewType() {
-        return HomeFragment.HOME_IMG_AD_TYPE;
+        return Constants.HOME_IMG_AD_TYPE;
     }
 
-
+    /**
+     * 图片广告的view holder类
+     */
     static class ImgAdHolder extends RecyclerView.ViewHolder{
         public ImgAdHolder(View itemView) {
             super(itemView);

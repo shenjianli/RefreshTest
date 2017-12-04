@@ -26,7 +26,6 @@
 
         <activity android:name=".app.CustomActivity"/>
         <activity android:name=".app.NormalActivity"></activity>
-        <activity android:name=".app.TestActivity"></activity>
     </application>
 
 </manifest>

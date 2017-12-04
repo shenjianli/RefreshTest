@@ -24,29 +24,41 @@ import java.util.List;
 
 
 /**
-
+ * 热销商品模块adapter
  */
 public class HotSaleAdapter extends BaseRecycleAdapter {
 
     private Context context;
+    /**
+     * 热销商品数据集合
+     */
     private List<Product> products;
-    private String ref;
 
     public HotSaleAdapter(Context context, List<Product> products){
         this.context = context;
         this.products = products;
     }
 
-
+    /**
+     * 创建热销商品的view holder
+     * @param parent
+     * @param viewType 指定的类型
+     * @return
+     */
     @Override
     public HotSaleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == HomeFragment.HOME_HOT_SALE_TYPE){
+        if (viewType == Constants.HOME_HOT_SALE_TYPE){
             return new HotSaleViewHolder(
                     LayoutInflater.from(context).inflate(R.layout.item_hot_sale_layout, parent, false));
         }
         return null;
     }
 
+    /**
+     * 对数据进行绑定
+     * @param holder
+     * @param position 表示此类型的位置索引
+     */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if( holder instanceof HotSaleViewHolder){
@@ -67,16 +79,27 @@ public class HotSaleAdapter extends BaseRecycleAdapter {
         }
     }
 
+    /**
+     * 返回热销商品模块类型值，这个值越大越靠近顶部
+     * @return
+     */
     @Override
     public int getItemViewType() {
-        return HomeFragment.HOME_HOT_SALE_TYPE;
+        return Constants.HOME_HOT_SALE_TYPE;
     }
 
+    /**
+     * 返回热销商品的个数
+     * @return
+     */
     @Override
     public int getItemCount() {
         return null == products ? 0 : products.size();
     }
 
+    /**
+     * 热销模块的布局viewholder
+     */
     public static class HotSaleViewHolder extends RecyclerView.ViewHolder {
 
         private RelativeLayout prodSumLayout;

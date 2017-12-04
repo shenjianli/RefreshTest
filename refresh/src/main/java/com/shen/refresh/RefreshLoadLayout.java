@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-;
+;import com.shen.refresh.util.LogUtils;
 
 
 /**
@@ -247,7 +247,9 @@ public class RefreshLoadLayout extends RelativeLayout {
         }
     }
 
-
+    /**
+     * 顶部布局刷新行为监听类
+     */
     public interface OnRefreshActionListener {
         /**
          * 表示下拉刷新时，距离顶部的距离
@@ -293,6 +295,9 @@ public class RefreshLoadLayout extends RelativeLayout {
         this.onLoadActionListener = onLoadActionListener;
     }
 
+    /**
+     * 加载更多监听
+     */
     public interface OnLoadActionListener {
         /**
          * 加载更多触发回调
@@ -311,6 +316,9 @@ public class RefreshLoadLayout extends RelativeLayout {
         this.onRefreshScrollListener = onRefreshScrollListener;
     }
 
+    /**
+     * 内容敬贺
+     */
     public interface OnRefreshScrollListener {
         /**
          * 表示内容区域滚动距离顶端距离
@@ -318,5 +326,15 @@ public class RefreshLoadLayout extends RelativeLayout {
          * @param toTop 到顶端距离
          */
         public void onScrollToTop(int toTop);
+    }
+
+    /**
+     * 设置打印日志使能状态
+     * @param enable true 表示打印日志  false 表示不打印日志 默认为false
+     * @return 返回日志的打印状态
+     */
+    public boolean setLogEnable(boolean enable){
+        LogUtils.isOutPutLog = enable;
+        return LogUtils.isOutPutLog;
     }
 }

@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.shen.refresh.BaseRecycleAdapter;
 import com.shen.refresh.util.LogUtils;
+import com.shen.refreshtest.Constants;
 import com.shen.refreshtest.R;
 import com.shen.refreshtest.app.HomeFragment;
 import com.shen.refreshtest.model.Product;
@@ -22,7 +23,7 @@ import java.util.List;
 
 
 /**
-
+ * 大数据推荐adapter
  */
 public class RecmdAdapter extends BaseRecycleAdapter {
 
@@ -35,16 +36,26 @@ public class RecmdAdapter extends BaseRecycleAdapter {
         this.products = products;
     }
 
-
+    /**
+     * 创建大数据的view holder
+     * @param parent
+     * @param viewType 指定的类型
+     * @return
+     */
     @Override
     public RcmViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == HomeFragment.HOME_RCM_TYPE){
+        if (viewType == Constants.HOME_RCM_TYPE){
             return new RcmViewHolder(
                     LayoutInflater.from(context).inflate(R.layout.item_hot_sale_layout, parent, false));
         }
         return null;
     }
 
+    /**
+     * 对大数据进行数据绑定
+     * @param holder
+     * @param position 表示此类型的位置索引
+     */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if(holder instanceof RcmViewHolder){
@@ -65,17 +76,27 @@ public class RecmdAdapter extends BaseRecycleAdapter {
         }
     }
 
+    /**
+     * 返回大数据类型值
+     * @return
+     */
     @Override
     public int getItemViewType() {
-        return HomeFragment.HOME_RCM_TYPE;
+        return Constants.HOME_RCM_TYPE;
     }
 
+    /**
+     * 返回大数据推荐的数目
+     * @return
+     */
     @Override
     public int getItemCount() {
         return null == products ? 0 : products.size();
     }
 
-
+    /**
+     * 大数据推荐view holder
+     */
     public static class RcmViewHolder extends RecyclerView.ViewHolder {
 
         private RelativeLayout prodSumLayout;

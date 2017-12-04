@@ -6,7 +6,7 @@ import java.util.Locale;
 
 public class LogUtils {
 	
-	public static boolean isOutPutLog = true;
+	public static boolean isOutPutLog = false;
 	
 	public static void v(String tag,String msg){
 		if(isOutPutLog){
