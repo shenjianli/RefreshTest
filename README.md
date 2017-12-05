@@ -6,7 +6,7 @@
 ![默认下拉刷新上拉加载](img/default_refresh_load.gif)
 
 ### Demo下载
-![Demo](ttps://github.com/shenjianli/RefreshTest/blob/master/doc/app-DevTest-debug.apk)
+![Demo](https://github.com/shenjianli/RefreshTest/raw/master/doc/app-DevTest-debug.apk)
 
 ### xml布局引入
 ```
