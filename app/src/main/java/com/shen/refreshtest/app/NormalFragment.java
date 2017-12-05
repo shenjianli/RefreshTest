@@ -287,7 +287,7 @@ public class NormalFragment extends BaseFragment implements HomeView {
         });
 
         /**
-         * 加载更多行为布局
+         * 加载更多监听
          */
         homeRefreshLoadLayout.setOnLoadActionListener(new RefreshLoadLayout.OnLoadActionListener() {
            @Override

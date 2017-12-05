@@ -35,9 +35,9 @@ public class LoadMoreCustomView extends BaseLoadMoreView {
 
     /**
      * 根据加载更多状态来更新显示布局
-     * @param holder
+     * @param holder 加载更多布局
      * @param position
-     * @param loadState
+     * @param loadState 加载更多的状态
      */
     public void bindView(final RecyclerView.ViewHolder holder, int position, int loadState) {
         if( holder instanceof LoadMoreViewHolder){
@@ -52,14 +52,17 @@ public class LoadMoreCustomView extends BaseLoadMoreView {
                 }
             });
             switch (loadState) {
+                // 表示正在加载中
                 case LOAD_MORE_LOADING:
                     ((LoadMoreViewHolder)holder).mLoaded.setVisibility(GONE);
                     ((LoadMoreViewHolder)holder).mLoading.setVisibility(VISIBLE);
                     break;
+                // 表示加载成功
                 case LOAD_MORE_SUCCESS:
                     ((LoadMoreViewHolder)holder).mLoaded.setVisibility(GONE);
                     ((LoadMoreViewHolder)holder).mLoading.setVisibility(GONE);
                     break;
+                // 表示加载失败
                 case LOAD_MORE_FAILURE:
                     ((LoadMoreViewHolder)holder).mLoaded.setVisibility(VISIBLE);
                     ((LoadMoreViewHolder)holder).mLoading.setVisibility(GONE);

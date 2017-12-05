@@ -285,11 +285,13 @@ public class CustomFragment extends BaseFragment implements HomeView {
              */
             @Override
             public void onUpdateAnimState(RecyclerRefreshLayout.ANIM_STATE animState) {
+                //动画开始
                 if (animState == RecyclerRefreshLayout.ANIM_STATE.ANIM_START) {
                     refreshDrawable.start();
                     refreshingLoadingImg.setVisibility(View.VISIBLE);
                     pullRefreshLoadLayout.setVisibility(View.GONE);
-                } else if (animState == RecyclerRefreshLayout.ANIM_STATE.ANIM_STOP) {
+                }//动画结束
+                else if (animState == RecyclerRefreshLayout.ANIM_STATE.ANIM_STOP) {
                     refreshDrawable.stop();
                     refreshingLoadingImg.setVisibility(View.GONE);
                     pullRefreshLoadLayout.setVisibility(View.VISIBLE);
