@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.widget.ImageView;
 
+import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.shen.refreshtest.R;
@@ -27,6 +28,7 @@ public class FrescoImageLoader extends ImageLoader {
         GenericDraweeHierarchy hierarchy = simpleDraweeView.getHierarchy();
         hierarchy.setPlaceholderImage(R.mipmap.ic_launcher);
         hierarchy.setFailureImage(R.mipmap.ic_launcher);
+        hierarchy.setActualImageScaleType(ScalingUtils.ScaleType.FIT_XY);
         return simpleDraweeView;
     }
 }

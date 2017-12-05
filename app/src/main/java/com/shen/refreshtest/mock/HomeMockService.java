@@ -50,7 +50,7 @@ public class HomeMockService extends MockService {
 
 
         ImgData imgData = new ImgData();
-        imgData.setImgUrl("http://image6.mall.icbc.com.cn/image/operationDefault/1508286955413.jpg");
+        imgData.setImgUrl("http://c.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6ed7d993388bcb39dbb6fd3c3b.jpg");
         imgData.setHrefUrl("http://m.mall.icbc.com.cn/mobile/mobileStroe/showSpecial.jhtml?themeId=0000000000143693&fromType=index");
 
         slides.add(imgData);
@@ -58,26 +58,26 @@ public class HomeMockService extends MockService {
 
 
         imgData = new ImgData();
-        imgData.setImgUrl("http://image5.mall.icbc.com.cn/image/operationDefault/1508290943308.jpg");
+        imgData.setImgUrl("http://b.hiphotos.baidu.com/image/pic/item/5bafa40f4bfbfbed1af73b9572f0f736aec31fa9.jpg");
         imgData.setHrefUrl("http://m.mall.icbc.com.cn/mobile/mobileProduct/product_0001351329.jhtml?fromType=index");
         slides.add(imgData);
         imgBigAdDatas.add(imgData);
 
         imgData = new ImgData();
-        imgData.setHrefUrl("http://jipiao.mall.icbc.com.cn/HTML5/index.aspx?fromType=index");
-        imgData.setImgUrl("http://image6.mall.icbc.com.cn/image/operationDefault/1508210841709.jpg");
+        imgData.setHrefUrl("http://d.hiphotos.baidu.com/image/pic/item/b17eca8065380cd722113b06ab44ad34588281ca.jpg");
+        imgData.setImgUrl("http://mpic.tiankong.com/aa6/099/aa6099c5de10c4dd6a11797a3ba7bb4c/640.jpg");
         imgBigAdDatas.add(imgData);
         slides.add(imgData);
 
 
         imgData = new ImgData();
-        imgData.setImgUrl("http://image5.mall.icbc.com.cn/image/operationDefault/1508117446936.jpg");
+        imgData.setImgUrl("http://mpic.tiankong.com/6d2/db0/6d2db0e71e4c3f12575cc522624c66b5/640.jpg");
         imgData.setHrefUrl("http://m.mall.icbc.com.cn/mobile/mobileStroe/showSpecial.jhtml?themeId=0000000000143291&fromType=index");
         imgBigAdDatas.add(imgData);
         slides.add(imgData);
 
         imgData = new ImgData();
-        imgData.setImgUrl("http://image6.mall.icbc.com.cn/image/operationDefault/1508305321669.jpg");
+        imgData.setImgUrl("http://c.hiphotos.baidu.com/image/pic/item/1e30e924b899a901bee64fde17950a7b0308f503.jpg");
         imgData.setHrefUrl("http://channels1.mall.icbc.com.cn/channels/mobile/operation/icbcsubtswh/index.html?fromType=index");
         imgBigAdDatas.add(imgData);
         slides.add(imgData);
@@ -110,7 +110,7 @@ public class HomeMockService extends MockService {
         product.setName("新加坡馆Us CLINICALS优克利深海鱼油软胶囊欧米伽3深海1");
         product.setUrl("http://m.mall.icbc.com.cn/mobile/mobileProduct/product_0000579919.jhtml?fromType=index");
         product.setPrice("￥435.00");
-        product.setImgUrl("http://image8.mall.icbc.com.cn/image/10012963/1459415955255_2_1.jpg");
+        product.setImgUrl("http://photocdn.sohu.com/20150727/mp24531450_1437996717965_13.jpeg");
         hotSales.add(product);
 
 
@@ -118,35 +118,35 @@ public class HomeMockService extends MockService {
         product.setName("金牛牌特级冰糖古晋官燕 6X75G，一套三盒2");
         product.setUrl("http://m.mall.icbc.com.cn/mobile/mobileProduct/product_0000663700.jhtml?fromType=index");
         product.setPrice("￥435.00");
-        product.setImgUrl("http://image5.mall.icbc.com.cn/image/10013696/1492570565174_2_1.jpg");
+        product.setImgUrl("http://www.sznews.com/ent/images/attachement/jpg/site3/20141128/001e4f9d635215e25c9d4a.jpg");
         hotSales.add(product);
 
         product = new Product();
         product.setName("新加坡馆Us CLINICALS优克利深海鱼油软胶囊欧米伽3深海3");
         product.setUrl("http://m.mall.icbc.com.cn/mobile/mobileProduct/product_0000481011.jhtml?fromType=index");
         product.setPrice("￥435.00");
-        product.setImgUrl("http://image8.mall.icbc.com.cn/image/10012963/1459415955255_2_1.jpg");
+        product.setImgUrl("http://img.taopic.com/uploads/userup/81387/e723c95ed40ba11bbb4f.jpg");
         hotSales.add(product);
 
         product = new Product();
         product.setName("新加坡馆Us CLINICALS优克利深海鱼油软胶囊欧米伽3深海4");
         product.setUrl("http://m.mall.icbc.com.cn/mobile/mobileProduct/product_0000579919.jhtml?fromType=index");
         product.setPrice("￥45.00");
-        product.setImgUrl("http://image8.mall.icbc.com.cn/image/10012963/1459415955255_2_1.jpg");
+        product.setImgUrl("http://dl.bizhi.sogou.com/images/2013/02/21/331906.jpg");
         hotSales.add(product);
 
         product = new Product();
         product.setName("新加坡馆Us CLINICALS优克利深海鱼油软胶囊欧米伽3深海5");
         product.setUrl("http://m.mall.icbc.com.cn/mobile/mobileProduct/product_0000579919.jhtml?fromType=index");
         product.setPrice("￥5.00");
-        product.setImgUrl("http://image8.mall.icbc.com.cn/image/10012963/1459415955255_2_1.jpg");
+        product.setImgUrl("http://news.cnhubei.com/xw/yl/201402/W020140216440305697457.jpg");
         hotSales.add(product);
 
         product = new Product();
         product.setName("新加坡馆Us-----测试用商品");
         product.setUrl("http://m.mall.icbc.com.cn/mobile/mobileProduct/product_0000579919.jhtml?fromType=index");
         product.setPrice("￥25.00");
-        product.setImgUrl("http://image8.mall.icbc.com.cn/image/10012963/1459415955255_2_1.jpg");
+        product.setImgUrl("http://file.iqilu.com/upimg/userup/0901/141K524HN.jpg");
         hotSales.add(product);
 
         homeData.setSlides(slides);
