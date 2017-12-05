@@ -8,6 +8,8 @@
 ### Demo下载
 ![Demo](https://github.com/shenjianli/RefreshTest/raw/master/doc/app-DevTest-debug.apk)
 
+[二维码下载](/img/demo_down_pic.png)
+
 ### xml布局引入
 ```
  <com.shen.refresh.RefreshLoadLayout
