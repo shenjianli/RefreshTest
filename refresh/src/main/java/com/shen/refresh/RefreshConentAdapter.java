@@ -144,16 +144,17 @@ public class RefreshConentAdapter extends RefreshLoadAdapter {
                 RefreshData refreshData = refreshDatas.get(position);
                 int viewType = refreshData.getType();
                 int firstIndex = getFirstItemByType(viewType);
-                BaseRecycleAdapter baseHomeAdapter = baseHomeAdapters.get(viewType);
-                //根据位置索引对加入的Adapter进行绑定数据有调用
-                if (null != baseHomeAdapter) {
-                    long time = System.currentTimeMillis();
-                    baseHomeAdapter.setScrolling(isScrolling());
-                    baseHomeAdapter.onBindViewHolder(holder, position - firstIndex);
-                    LogUtils.i("类型：" + viewType  + "，进行数据绑定");
-                    LogUtils.i(viewType + "耗时：" +  (System.currentTimeMillis() - time));
+                if(-1 != firstIndex){
+                    BaseRecycleAdapter baseHomeAdapter = baseHomeAdapters.get(viewType);
+                    //根据位置索引对加入的Adapter进行绑定数据有调用
+                    if (null != baseHomeAdapter) {
+                        long time = System.currentTimeMillis();
+                        baseHomeAdapter.setScrolling(isScrolling());
+                        baseHomeAdapter.onBindViewHolder(holder, position - firstIndex);
+                        LogUtils.i("类型：" + viewType  + "，进行数据绑定");
+                        LogUtils.i(viewType + "耗时：" +  (System.currentTimeMillis() - time));
+                    }
                 }
-
             }
 //        }
     }
@@ -198,7 +199,7 @@ public class RefreshConentAdapter extends RefreshLoadAdapter {
      * @return 返回位置索引
      */
     public int getFirstItemByType(int viewType) {
-        int index = 0;
+        int index = - 1;
         for (int i = 0; i < refreshDatas.size(); i++){
             RefreshData refreshData = refreshDatas.get(i);
             if(null != refreshData){
@@ -209,6 +210,50 @@ public class RefreshConentAdapter extends RefreshLoadAdapter {
             }
         }
         return index;
+    }
+
+    /**
+     * 根据类型值返回该类型最后一项值的位置索引
+     * @param viewType 具体的类型
+     * @return 返回位置索引
+     */
+    public int getLastItemIndexByType(int viewType) {
+        int index = -1;
+        for (int i = 0; i < refreshDatas.size(); i++){
+            RefreshData refreshData = refreshDatas.get(i);
+            if(null != refreshData){
+                if(viewType == refreshData.getType()){
+                    index = i;
+                }
+                //如果遍历到大于viewType的类型则结束
+                if(viewType < refreshData.getType()){
+                    break;
+                }
+            }
+        }
+        return index;
+    }
+
+    /**
+     * 根据类型值返回该类型数目
+     * @param viewType 具体的类型
+     * @return 返回类型数目
+     */
+    public int getItemSizeByType(int viewType) {
+        int num = 0;
+        for (int i = 0; i < refreshDatas.size(); i++){
+            RefreshData refreshData = refreshDatas.get(i);
+            if(null != refreshData){
+                if(viewType == refreshData.getType()){
+                    num = num + 1;
+                }
+                //如果遍历到大于viewType的类型则结束
+                if(viewType < refreshData.getType()){
+                    break;
+                }
+            }
+        }
+        return num;
     }
 
     @Override
@@ -401,4 +446,20 @@ public class RefreshConentAdapter extends RefreshLoadAdapter {
 
     }
 
+    /**
+     * 根据类型刷新相应的item
+     * @param itemType
+     */
+    public void notifyItemChangedByType(int itemType) {
+        int firstIndex = getFirstItemByType(itemType);
+        int itemCount = getItemSizeByType(itemType);
+        if(-1 != firstIndex){
+            if(1 == itemCount){
+                notifyItemChanged(firstIndex);
+            }
+            else {
+                notifyItemRangeChanged(firstIndex, itemCount);
+            }
+        }
+    }
 }
